@@ -1,33 +1,33 @@
 # Claude
 
-Personal Claude configuration. Project-scoped MCP servers live in [`.mcp.json`](.mcp.json), which Claude Code picks up automatically when a session starts in this repository.
+Configuração pessoal do Claude. Os servidores MCP com escopo de projeto ficam em [`.mcp.json`](.mcp.json), que o Claude Code carrega automaticamente ao iniciar uma sessão neste repositório.
 
-## Pierre Finance MCP server
+## Servidor MCP Pierre Finance
 
-[`.mcp.json`](.mcp.json) connects Claude to the Pierre Finance MCP endpoint (`https://pierre.finance/mcp`) through [`mcp-remote`](https://www.npmjs.com/package/mcp-remote), which bridges the remote HTTP server to stdio and attaches an `Authorization` header. Requires Node.js (for `npx`).
+O [`.mcp.json`](.mcp.json) conecta o Claude ao endpoint MCP do Pierre Finance (`https://pierre.finance/mcp`) por meio do [`mcp-remote`](https://www.npmjs.com/package/mcp-remote), que faz a ponte entre o servidor HTTP remoto e o transporte stdio, anexando um cabeçalho `Authorization`. Requer Node.js (para o `npx`).
 
-### Setup
+### Configuração
 
-1. Get your Pierre Finance API key (`sk-...`).
-2. Export it in the environment Claude Code launches from, e.g. in `~/.bashrc` or `~/.zshrc`:
+1. Obtenha sua chave de API do Pierre Finance (`sk-...`).
+2. Exporte-a no ambiente de onde o Claude Code é iniciado, por exemplo no `~/.bashrc` ou `~/.zshrc`:
 
    ```bash
    export PIERRE_FINANCE_API_KEY="sk-..."
    ```
 
-3. Start Claude Code in this repository and approve the project MCP server when prompted. `claude mcp list` should then show **Pierre Finance** as connected.
+3. Inicie o Claude Code neste repositório e aprove o servidor MCP do projeto quando solicitado. `claude mcp list` deve então mostrar **Pierre Finance** como conectado.
 
-The committed config never contains a real key. `.mcp.json` reads it via `${PIERRE_FINANCE_API_KEY:-sk-your-api-key-here}` [environment variable expansion](https://code.claude.com/docs/en/mcp#environment-variable-expansion-in-mcp-json), so until the variable is set the placeholder is used and authentication simply fails. Never replace the placeholder with a real key in this tracked file.
+O arquivo versionado nunca contém uma chave real. O `.mcp.json` lê a chave via [expansão de variável de ambiente](https://code.claude.com/docs/en/mcp#environment-variable-expansion-in-mcp-json) `${PIERRE_FINANCE_API_KEY:-sk-your-api-key-here}`; enquanto a variável não estiver definida, o placeholder é usado e a autenticação simplesmente falha. Nunca substitua o placeholder por uma chave real neste arquivo rastreado pelo git.
 
-### How the header is assembled
+### Como o cabeçalho é montado
 
-Claude Code expands `${PIERRE_FINANCE_API_KEY}` inside the server's `env` block, producing `PIERRE_FINANCE_AUTH="Bearer sk-..."` in the spawned process. The `--header Authorization:${PIERRE_FINANCE_AUTH}` argument is then interpolated by `mcp-remote` itself from that environment — the [documented pattern](https://www.npmjs.com/package/mcp-remote#custom-headers) for keeping spaces out of client args.
+O Claude Code expande `${PIERRE_FINANCE_API_KEY}` dentro do bloco `env` do servidor, produzindo `PIERRE_FINANCE_AUTH="Bearer sk-..."` no processo iniciado. O argumento `--header Authorization:${PIERRE_FINANCE_AUTH}` é então interpolado pelo próprio `mcp-remote` a partir desse ambiente — o [padrão documentado](https://www.npmjs.com/package/mcp-remote#custom-headers) para evitar espaços nos argumentos do cliente.
 
-On Claude Code you could alternatively drop `mcp-remote` and use the native HTTP transport (`"type": "http"` with a `headers` map); the stdio bridge is kept for parity with clients that lack remote support.
+No Claude Code seria possível, alternativamente, dispensar o `mcp-remote` e usar o transporte HTTP nativo (`"type": "http"` com um mapa `headers`); a ponte stdio foi mantida por compatibilidade com clientes sem suporte a servidores remotos.
 
 ### Claude Desktop
 
-Claude Desktop doesn't read `.mcp.json` and performs no variable expansion. Add the server to `claude_desktop_config.json` with the token inline — that file lives outside this repository, but still treat it as a secret:
+O Claude Desktop não lê `.mcp.json` e não faz expansão de variáveis. Adicione o servidor ao `claude_desktop_config.json` com o token embutido — esse arquivo fica fora deste repositório, mas mesmo assim trate-o como um segredo:
 
 ```json
 {
