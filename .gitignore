@@ -1,0 +1,6 @@
+# Never commit secrets
+.env
+.env.*
+
+# Machine-local Claude Code overrides
+.claude/settings.local.json

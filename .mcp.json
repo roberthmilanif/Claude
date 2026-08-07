@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "Pierre Finance": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://pierre.finance/mcp",
+        "--header",
+        "Authorization:${PIERRE_FINANCE_AUTH}"
+      ],
+      "env": {
+        "PIERRE_FINANCE_AUTH": "Bearer ${PIERRE_FINANCE_API_KEY:-sk-your-api-key-here}"
+      }
+    }
+  }
+}
