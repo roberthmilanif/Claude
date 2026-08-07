@@ -9,7 +9,13 @@ O [`.mcp.json`](.mcp.json) conecta o Claude ao endpoint MCP do Pierre Finance (`
 ### Configuração
 
 1. Obtenha sua chave de API do Pierre Finance (`sk-...`).
-2. Exporte-a no ambiente de onde o Claude Code é iniciado, por exemplo no `~/.bashrc` ou `~/.zshrc`:
+2. Na pasta do repositório, rode o script de configuração e cole a chave quando solicitado — ela é gravada no seu perfil do shell, fora do repositório:
+
+   ```bash
+   ./setup.sh
+   ```
+
+   Ou, se preferir fazer manualmente, exporte-a no `~/.bashrc` ou `~/.zshrc`:
 
    ```bash
    export PIERRE_FINANCE_API_KEY="sk-..."
