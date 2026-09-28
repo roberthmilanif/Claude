@@ -1,16 +1,188 @@
-<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#07131d"><title>Psychiatry OS</title><link rel="stylesheet" href="styles.css"></head><body>
-<header><div><small>CONSULTA PSIQUIÁTRICA • APOIO À DECISÃO</small><h1>Psychiatry OS</h1></div><div class="top"><button id="new">Nova consulta</button><button id="theme">◐</button></div></header>
-<div class="shell"><aside><nav id="nav"></nav><div class="asidefoot"><b>Rascunho local</b><span>Dados ficam neste dispositivo. Evite identificadores desnecessários.</span></div></aside>
-<main><section id="inicio" class="page active"><div class="hero"><div><span class="pill">Modo consulta</span><h2>Uma anamnese que pensa junto.</h2><p>Roteiro vivo, exame do estado mental, rastreios, diferenciais, segurança, psicofarmacologia, monitorização e evolução pronta para copiar.</p></div><div class="timer"><b id="clock">00:00</b><button id="timerBtn">Iniciar consulta</button></div></div>
-<div class="grid3"><article><h3>⚡ Fluxo rápido</h3><p>Queixa → síndromes → EEM → risco → hipótese → plano.</p><button data-go="entrevista">Começar entrevista</button></article><article><h3>🧭 Segurança</h3><p>Suicídio, heteroagressividade, mania, psicose, intoxicação/abstinência e delirium sempre visíveis.</p><button data-go="seguranca">Checar risco</button></article><article><h3>💊 Medicação</h3><p>Biblioteca prática com alertas, exames e monitorização. Prescrição exige revisão clínica.</p><button data-go="farmaco">Abrir psicofármacos</button></article></div>
-<div class="card"><h3>Radar da consulta</h3><div id="radar" class="checks"></div></div></section>
-<section id="entrevista" class="page"><h2>Entrevista clínica</h2><p class="lead">Use como teleprompter. Marque o que perguntou e registre apenas o que muda decisão.</p><div id="interview"></div></section>
-<section id="eem" class="page"><h2>Exame do Estado Mental</h2><div id="mse" class="formgrid"></div></section>
-<section id="escalas" class="page"><h2>Rastreios e escalas</h2><p class="lead">Instrumentos auxiliam, não substituem diagnóstico. Pontuações devem ser interpretadas no contexto clínico.</p><div id="scales" class="grid2"></div></section>
-<section id="seguranca" class="page"><h2>Segurança e urgências</h2><div class="danger"><b>Se houver risco iminente</b><span>priorize contenção ambiental, supervisão, avaliação de meios, rede de apoio e encaminhamento para cuidado de urgência conforme o cenário.</span></div><div id="risk"></div></section>
-<section id="diagnostico" class="page"><h2>Formulação diagnóstica</h2><div class="grid2"><div class="card"><h3>Síndromes / hipóteses</h3><div id="dxchips" class="chips"></div><textarea id="dxnotes" placeholder="Hipótese principal, diferenciais, fatores precipitantes/perpetuadores/protetores..."></textarea></div><div class="card"><h3>Antes de fechar o diagnóstico</h3><div id="ruleouts" class="checks"></div></div></div><div class="card"><h3>Formulação 5 Ps</h3><div class="formgrid" id="fivep"></div></div></section>
-<section id="farmaco" class="page"><h2>Psicofarmacologia</h2><div class="notice"><b>Guardrail clínico</b><span>Doses abaixo são referências adultas usuais para apoio à revisão. Confirme indicação, formulação, interações, função renal/hepática, gestação, idade e bula/protocolo local antes de prescrever.</span></div><input id="drugSearch" class="search" placeholder="Buscar antidepressivo, antipsicótico, estabilizador..."><div id="drugs" class="druggrid"></div></section>
-<section id="plano" class="page"><h2>Plano terapêutico</h2><div class="grid2"><div class="card"><h3>Não farmacológico</h3><div id="nonpharm" class="checks"></div></div><div class="card"><h3>Monitorização</h3><div id="monitor" class="checks"></div></div></div><div class="card"><h3>Plano livre</h3><textarea id="plantext" placeholder="Medicação, titulação, psicoterapia, exames, orientações, retorno, sinais de alarme..."></textarea></div></section>
-<section id="evolucao" class="page"><h2>Evolução / prontuário</h2><div class="card"><div class="actions"><button id="generate">Gerar evolução</button><button id="copy">Copiar</button><button id="print">Imprimir</button></div><textarea id="output" class="output" placeholder="A evolução será montada a partir da consulta..."></textarea></div></section>
-<section id="referencias" class="page"><h2>Referências rápidas</h2><div class="card"><p>Base de apoio: diretrizes NICE, CANMAT, documentos regulatórios e protocolos locais. Atualize a biblioteca conforme seu serviço.</p><p><b>Princípio do app:</b> diagnóstico permanece clínico. Escalas organizam probabilidade e gravidade; medicação é apresentada com checagens de segurança e monitorização.</p></div></section>
-</main></div><script src="app.js"></script></body></html>
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#07131d">
+  <meta name="description" content="Cockpit clínico local-first para consulta psiquiátrica estruturada.">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Psychiatry OS — Consulta</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon-192.svg">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip" href="#workspace">Ir para a consulta</a>
+  <header class="appbar">
+    <button class="brand" data-go="consulta" aria-label="Ir para consulta">
+      <span class="brandmark">P</span>
+      <span><b>Psychiatry OS</b><small>consulta clínica</small></span>
+    </button>
+    <div class="patient-strip">
+      <label>Identificador <input id="patientId" autocomplete="off" placeholder="Iniciais ou nº"></label>
+      <label>Idade <input id="patientAge" type="number" min="0" max="130" inputmode="numeric" placeholder="—"></label>
+      <span class="save-state" id="saveState"><i></i> Salvo neste dispositivo</span>
+    </div>
+    <div class="app-actions">
+      <button class="ghost install-hidden" id="installApp">Instalar app</button>
+      <button class="ghost" id="exportData">Exportar</button>
+      <button class="ghost danger-text" id="newConsult">Nova consulta</button>
+    </div>
+  </header>
+
+  <div class="app-shell">
+    <aside class="rail" aria-label="Etapas da consulta">
+      <nav id="nav"></nav>
+      <div class="rail-footer">
+        <button class="emergency-link" data-go="seguranca"><span>!</span> Modo emergência</button>
+        <p>Dados locais. Evite identificadores desnecessários.</p>
+      </div>
+    </aside>
+
+    <main id="workspace">
+      <section class="page active" id="consulta">
+        <div class="consult-header">
+          <div>
+            <p class="eyebrow">CONSULTA EM ANDAMENTO</p>
+            <h1>Próxima pergunta</h1>
+          </div>
+          <div class="consult-meta">
+            <span id="progressText">0 de 12 eixos essenciais</span>
+            <div class="timer"><b id="clock">00:00</b><button class="quiet" id="timerBtn">Iniciar</button></div>
+          </div>
+        </div>
+
+        <div class="consult-grid">
+          <div class="focus-column">
+            <article class="question-card" id="questionCard">
+              <div class="question-topline">
+                <span class="tag" id="questionDomain">Abertura</span>
+                <span class="priority" id="questionPriority">essencial</span>
+              </div>
+              <h2 id="questionText">O que fez você procurar ajuda justamente agora?</h2>
+              <p id="questionHint">Comece com a narrativa livre. Depois delimite início, curso, contexto e impacto funcional.</p>
+              <div class="response-options" id="responseOptions" role="group" aria-label="Resposta clínica">
+                <button data-answer="present">Presente</button>
+                <button data-answer="absent">Ausente</button>
+                <button data-answer="unknown">Não explorado</button>
+              </div>
+              <label class="clinical-note">Nota clínica
+                <textarea id="questionNote" rows="5" placeholder="Registre a resposta com as palavras do paciente e apenas o que muda a decisão clínica."></textarea>
+              </label>
+              <div class="question-actions">
+                <button class="ghost" id="previousQuestion">Voltar</button>
+                <div><span class="shortcut">⌘/Ctrl + Enter</span><button class="primary" id="nextQuestion">Salvar e continuar</button></div>
+              </div>
+            </article>
+
+            <div class="clinical-inbox">
+              <div class="section-title"><div><p class="eyebrow">FILA ADAPTATIVA</p><h3>O que falta esclarecer</h3></div><button class="quiet" id="showAllQuestions">Ver roteiro completo</button></div>
+              <div id="questionQueue" class="queue"></div>
+            </div>
+          </div>
+
+          <aside class="clinical-sidebar">
+            <div class="status-card safety-status" id="safetyStatus">
+              <div class="status-heading"><span class="status-icon">!</span><div><small>SEGURANÇA</small><b id="safetyLabel">Ainda não avaliada</b></div></div>
+              <p id="safetySummary">Ideação suicida, violência, psicose, mania, substâncias e delirium.</p>
+              <button data-go="seguranca">Avaliar agora</button>
+            </div>
+            <div class="status-card">
+              <div class="section-title"><div><small>MAPA DA CONSULTA</small><b>Cobertura clínica</b></div><strong id="completionPct">0%</strong></div>
+              <div class="progress"><i id="completionBar"></i></div>
+              <div class="coverage" id="coverage"></div>
+            </div>
+            <div class="status-card signals-card">
+              <small>SINAIS ATIVOS</small>
+              <div id="activeSignals" class="signal-list"><span class="empty-inline">Nenhum sinal clínico registrado.</span></div>
+            </div>
+            <button class="finish-card" data-go="evolucao"><span>Gerar evolução</span><small>Revisar dados faltantes e copiar para o prontuário</small></button>
+          </aside>
+        </div>
+      </section>
+
+      <section class="page" id="roteiro">
+        <div class="page-heading"><div><p class="eyebrow">ANAMNESE LONGITUDINAL</p><h1>Roteiro completo</h1><p>Abra apenas os eixos necessários. As respostas alimentam o resumo clínico.</p></div><button class="primary" data-go="consulta">Voltar à próxima pergunta</button></div>
+        <div id="fullInterview" class="accordion-list"></div>
+      </section>
+
+      <section class="page" id="eem">
+        <div class="page-heading"><div><p class="eyebrow">EXAME DO ESTADO MENTAL</p><h1>Observação estruturada</h1><p>Selecione descritores rápidos e complemente quando houver achado relevante.</p></div><button class="primary" id="applyNormalMse">Preencher exame sem alterações</button></div>
+        <div id="mseGrid" class="mse-grid"></div>
+      </section>
+
+      <section class="page" id="escalas">
+        <div class="page-heading"><div><p class="eyebrow">MEDIDAS CLÍNICAS</p><h1>Escalas e rastreios</h1><p>Use para gravidade e seguimento. Resultado positivo não fecha diagnóstico.</p></div></div>
+        <div class="scale-tabs" id="scaleTabs"></div>
+        <div id="scaleWorkspace"></div>
+      </section>
+
+      <section class="page" id="seguranca">
+        <div class="page-heading"><div><p class="eyebrow red">MODO EMERGÊNCIA</p><h1>Segurança e urgências</h1><p>Avaliação estruturada baseada em fatores, investigação, estratificação e plano documentado.</p></div><button class="ghost" id="clearSafety">Limpar avaliação</button></div>
+        <div class="emergency-banner" id="emergencyBanner"><span>!</span><div><b>Comece por risco iminente</b><p>Se houver intenção atual, plano viável, acesso a meios, psicose de comando, agitação grave ou incapacidade de autocuidado, mantenha supervisão e organize cuidado de urgência.</p></div></div>
+        <div class="safety-layout">
+          <div id="safetySteps" class="safety-steps"></div>
+          <aside class="risk-summary-card">
+            <p class="eyebrow">SÍNTESE CLÍNICA</p>
+            <div class="risk-meter"><span id="riskBadge">Pendente</span><b id="riskLevel">Sem estratificação</b></div>
+            <p id="riskRationale">Conclua a investigação e registre seu julgamento clínico. A soma de itens não substitui a formulação de risco.</p>
+            <label>Julgamento e justificativa<textarea id="riskJudgment" rows="5" placeholder="Risco agudo/crônico, razões, incertezas e capacidade de colaboração..."></textarea></label>
+            <label>Disposição<select id="riskDisposition"><option value="">Selecionar...</option><option>Seguimento ambulatorial com plano de segurança</option><option>Reavaliação breve / contato intensificado</option><option>Avaliação presencial urgente</option><option>Encaminhamento para emergência / hospitalização</option></select></label>
+            <label>Plano de segurança<textarea id="safetyPlan" rows="5" placeholder="Sinais de alerta; estratégias; contatos; rede; restrição de meios; serviço de crise..."></textarea></label>
+          </aside>
+        </div>
+      </section>
+
+      <section class="page" id="diagnostico">
+        <div class="page-heading"><div><p class="eyebrow">RACIOCÍNIO CLÍNICO</p><h1>Hipóteses e diferenciais</h1><p>Separe síndrome, diagnóstico de trabalho, alternativas e condições a excluir.</p></div></div>
+        <div class="diagnostic-grid">
+          <article class="panel"><h2>Famílias diagnósticas</h2><div id="diagnosticChips" class="chips"></div><label>Hipótese principal<input id="primaryDiagnosis" placeholder="Descrição clínica e CID, se pertinente"></label><label>Diferenciais<textarea id="differentials" rows="4"></textarea></label></article>
+          <article class="panel"><h2>Não perder</h2><div id="ruleoutList" class="check-list"></div></article>
+        </div>
+        <article class="panel"><div class="section-title"><div><p class="eyebrow">FORMULAÇÃO</p><h2>5 Ps + objetivo do paciente</h2></div></div><div id="formulationGrid" class="formulation-grid"></div></article>
+      </section>
+
+      <section class="page" id="farmacos">
+        <div class="page-heading"><div><p class="eyebrow">PSICOFARMACOLOGIA</p><h1>Decisão medicamentosa</h1><p>Referências adultas para revisão clínica — indicação, contexto, comorbidades, interações e bula prevalecem.</p></div><button class="ghost" id="openComparison">Comparar <span id="compareCount">0</span></button></div>
+        <div class="med-toolbar"><input id="drugSearch" type="search" placeholder="Buscar fármaco, classe, indicação ou cautela..."><select id="drugClass"><option value="">Todas as classes</option></select></div>
+        <div id="drugGrid" class="drug-grid"></div>
+      </section>
+
+      <section class="page" id="plano">
+        <div class="page-heading"><div><p class="eyebrow">CONDUTA</p><h1>Plano terapêutico</h1><p>Transforme a decisão em prescrição, monitorização, orientações e seguimento verificáveis.</p></div><button class="primary" id="addMedication">Adicionar medicamento</button></div>
+        <article class="panel"><h2>Prescrição em construção</h2><div id="medicationPlan" class="medication-plan"></div></article>
+        <div class="plan-grid">
+          <article class="panel"><h2>Medidas não farmacológicas</h2><div id="nonPharmList" class="check-list"></div></article>
+          <article class="panel"><h2>Monitorização sugerida</h2><div id="monitoringList" class="check-list"></div></article>
+        </div>
+        <article class="panel plan-details"><label>Exames e monitorização adicional<textarea id="planMonitoring" rows="4"></textarea></label><label>Orientações e sinais de alarme<textarea id="planGuidance" rows="4"></textarea></label><label>Retorno e contingência<textarea id="followUp" rows="4" placeholder="Prazo, metas, escalas a repetir e quando antecipar retorno..."></textarea></label></article>
+      </section>
+
+      <section class="page" id="evolucao">
+        <div class="page-heading"><div><p class="eyebrow">DOCUMENTAÇÃO</p><h1>Evolução psiquiátrica</h1><p>Revise o rascunho: itens não explorados aparecem como pendências, nunca como achados negativos.</p></div><div class="heading-actions"><button class="ghost" id="copyEvolution">Copiar</button><button class="ghost" id="printEvolution">Imprimir</button><button class="primary" id="generateEvolution">Atualizar evolução</button></div></div>
+        <div class="documentation-layout">
+          <article class="panel missing-card"><h2>Antes de finalizar</h2><div id="missingData"></div></article>
+          <article class="panel evolution-card"><textarea id="evolutionOutput" spellcheck="true" aria-label="Evolução gerada"></textarea></article>
+        </div>
+      </section>
+
+      <section class="page" id="referencias">
+        <div class="page-heading"><div><p class="eyebrow">BASE CLÍNICA</p><h1>Referências e limites</h1><p>Conteúdo de apoio à decisão para profissional habilitado, com revisão clínica obrigatória.</p></div></div>
+        <div class="reference-grid" id="referenceGrid"></div>
+      </section>
+    </main>
+  </div>
+
+  <nav class="mobile-nav" id="mobileNav" aria-label="Navegação móvel"></nav>
+
+  <dialog id="drugDialog"><div class="dialog-shell"><button class="dialog-close" data-close-dialog aria-label="Fechar">×</button><div id="drugDetails"></div></div></dialog>
+  <dialog id="compareDialog"><div class="dialog-shell wide"><button class="dialog-close" data-close-dialog aria-label="Fechar">×</button><div id="comparisonTable"></div></div></dialog>
+  <dialog id="confirmDialog"><form method="dialog" class="confirm-box"><span class="confirm-icon">!</span><h2>Iniciar nova consulta?</h2><p>O rascunho atual será removido deste dispositivo. Exporte-o antes se precisar guardar uma cópia.</p><div><button value="cancel" class="ghost">Cancelar</button><button value="confirm" class="danger-button">Apagar e iniciar</button></div></form></dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
