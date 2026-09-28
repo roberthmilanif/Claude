@@ -109,8 +109,9 @@
 
   function renderScales(){
     $('#scaleTabs').innerHTML=D.scales.map(s=>`<button data-scale="${s.id}" class="${activeScale===s.id?'active':''}">${s.name}<span>${scaleTotal(s.id)}</span></button>`).join('');
-    const s=D.scales.find(x=>x.id===activeScale),values=state.scales[s.id]||Array(s.items.length).fill(null),total=values.reduce((a,v)=>a+(Number(v)||0),0);
-    $('#scaleWorkspace').innerHTML=`<article class="scale-sheet"><div class="scale-header"><div><p class="eyebrow">${s.name}</p><h2>${s.purpose}</h2></div><div class="score-orb"><b>${total}</b><span>${s.interpret(total)}</span></div></div><div class="scale-legend">${s.labels.map((l,i)=>`<span><b>${s.range[i]}</b>${l}</span>`).join('')}</div><div class="scale-items">${s.items.map((item,i)=>`<div class="scale-item"><div><span>${i+1}</span><p>${item}</p>${s.alertIndex===i?'<small>Qualquer resposta acima de zero exige avaliação clínica de segurança.</small>':''}</div><div class="scale-options">${s.range.map(v=>`<label><input type="radio" name="${s.id}-${i}" value="${v}" data-scale-item="${i}" ${Number(values[i])===v?'checked':''}><span>${v}</span></label>`).join('')}</div></div>`).join('')}</div><p class="scale-footnote">Interprete junto com prejuízo funcional, contexto, diagnóstico diferencial e avaliação clínica.</p></article>`;
+    const s=D.scales.find(x=>x.id===activeScale),values=state.scales[s.id]||Array(s.items.length).fill(null),total=values.reduce((a,v)=>a+(Number(v)||0),0),answered=values.filter(v=>v!==null&&v!==undefined).length;
+    const scoreLabel=answered===s.items.length?s.interpret(total):`${answered}/${s.items.length} respondidos`;
+    $('#scaleWorkspace').innerHTML=`<article class="scale-sheet"><div class="scale-header"><div><p class="eyebrow">${s.name}</p><h2>${s.purpose}</h2></div><div class="score-orb"><b>${answered?total:'—'}</b><span>${scoreLabel}</span></div></div><div class="scale-legend">${s.labels.map((l,i)=>`<span><b>${s.range[i]}</b>${l}</span>`).join('')}</div><div class="scale-items">${s.items.map((item,i)=>`<div class="scale-item"><div><span>${i+1}</span><p>${item}</p>${s.alertIndex===i?'<small>Qualquer resposta acima de zero exige avaliação clínica de segurança.</small>':''}</div><div class="scale-options">${s.range.map(v=>`<label><input type="radio" name="${s.id}-${i}" value="${v}" data-scale-item="${i}" ${values[i]!==null&&values[i]!==undefined&&Number(values[i])===v?'checked':''}><span>${v}</span></label>`).join('')}</div></div>`).join('')}</div><p class="scale-footnote">Interprete junto com prejuízo funcional, contexto, diagnóstico diferencial e avaliação clínica.</p></article>`;
   }
   function scaleTotal(id){return (state.scales[id]||[]).reduce((a,v)=>a+(Number(v)||0),0)}
 
@@ -272,7 +273,6 @@ Observação: revisar indicação, doses, contraindicações, interações, fun�
       const remove=e.target.closest('[data-remove-med]');if(remove){state.medications=state.medications.filter(m=>m.id!==remove.dataset.removeMed);saveState();renderPlan();return}
       const close=e.target.closest('[data-close-dialog]');if(close){close.closest('dialog').close();return}
     });
-    $('#responseOptions').addEventListener('click',e=>{const b=e.target.closest('[data-answer]');if(b)setAnswer(b.dataset.answer)});
     $('#nextQuestion').onclick=saveAndNext;$('#previousQuestion').onclick=previousQuestion;
     $('#showAllQuestions').onclick=()=>goPage('roteiro');
     $('#questionNote').addEventListener('input',()=>{const q=currentQuestion();state.answers[q.id]={...(state.answers[q.id]||{}),note:$('#questionNote').value};saveState()});
