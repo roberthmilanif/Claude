@@ -1,0 +1,112 @@
+MAC MINI NAO APARECE COMO DISPOSITIVO NO IPHONE - DIAGNOSTICO E CORRECAO
+Gerado em 17/10/2026 (America/Bahia) a partir dos registros da conta Claude + documentacao oficial.
+
+========================================================================
+1. O QUE OS REGISTROS DA CONTA MOSTRAM
+========================================================================
+- 29/09/2026: o Mac Mini (usuario roberthmilani, macOS, Claude Code 2.1.284) rodou uma
+  sessao de Remote Control nesta mesma conta ("Limpar fora do Parallels"). Logo:
+  conta correta e Remote Control ja funcionou no Mac.
+- 12/09, 15/09, 28/09 e 16/10/2026: todas as outras sessoes "no computador" vieram do
+  Steam Deck (/home/deck). A ultima foi ontem, 16/10, 16:11-16:58 ("Atualizar pxplay").
+- Agora: nenhum computador conectado a conta (nenhuma sessao de Remote Control ativa).
+- O seletor "uso do computador" do iPhone e o DISPATCH (Cowork). O Dispatch pareia
+  UM computador por vez, e o pareamento e feito NO COMPUTADOR, nunca pelo celular.
+  Por isso as 3 tentativas pelo iPhone deram o mesmo resultado: o celular so lista o
+  computador que ja esta pareado - hoje, o Windows antigo.
+- Inferencia (nao confirmada): o "Windows antigo" e provavelmente o Windows instalado
+  no cartao SD do Steam Deck (DECKWINOS), usado em 12/09 e reparado em 15/09.
+
+CONCLUSAO: nao e bug do iPhone nem conta errada. O Mac Mini nunca completou a
+configuracao do Dispatch no app Claude para Mac, e o pareamento esta preso no Windows.
+
+========================================================================
+2. CORRECAO - PASSOS NO MAC MINI (ordem obrigatoria)
+========================================================================
+Rotulos em ingles (documentacao). Em PT-BR o app traduz; o lugar e o mesmo.
+
+PASSO A - Pre-requisitos
+  [ ] App Claude para Mac ABERTO e atualizado (menu Claude > About; se duvida,
+      baixe de claude.com/download e reinstale por cima).
+  [ ] Logado em roberthmilaniif@gmail.com (Settings > Account).
+  [ ] macOS 15 ou superior (necessario para uso do computador em segundo plano).
+  [ ] Mac acordado. Dica: no Terminal, "caffeinate -dims &" segura o Mac acordado
+      enquanto o Terminal estiver aberto.
+
+PASSO B - Ligar uso do computador no app do Mac
+  Settings > General > secao "Desktop app" > "Enable computer use" = LIGADO.
+  Opcional: "When Claude requests access to an app" = "Full control" (sem pedir a
+  cada app). Na primeira vez o macOS vai pedir Acessibilidade e Gravacao de Tela
+  para o Claude em Ajustes do Sistema > Privacidade e Seguranca - conceda.
+
+PASSO C - Parear o Dispatch (e isso que faz o Mac aparecer no iPhone)
+  No app do Mac: Cowork > "Dispatch" (painel esquerdo) > "Get started" >
+  ligar acesso aos arquivos e "manter o computador acordado" > "Finish setup".
+
+  Se aparecer: "Another device is connected. A Cowork agent is already running on
+  <nome do Windows>. Quit the Claude app on that device, then restart this one to
+  take over."
+     -> Se o Windows ainda existe e liga: feche o Claude nele, reabra o app no Mac,
+        repita o Passo C.
+     -> Se o Windows nao existe mais (pareamento fantasma): va ao PLANO C abaixo.
+
+PASSO D - Testar no iPhone
+  Atualize o app Claude na App Store. Abra Cowork > Dispatch > "uso do computador".
+  O Mac Mini deve aparecer no lugar do Windows. Mande uma tarefa simples:
+  "abra o WhatsApp Desktop e me diga a ultima conversa".
+
+PLANO C - Pareamento preso no Windows antigo (relato de usuarios no GitHub,
+          nao e procedimento oficial; faz backup antes, nada e apagado)
+  1. Feche o Claude no Mac (Cmd+Q).
+  2. No Terminal, cole:
+       B=~/Desktop/claude-backup-$(date +%Y%m%d-%H%M); mkdir -p "$B"
+       mv ~/Library/Application\ Support/Claude/bridge-state.json "$B"/ 2>/dev/null
+       mv ~/Library/Application\ Support/Claude/local-agent-mode-sessions "$B"/ 2>/dev/null
+       open -a Claude
+     (local-agent-mode-sessions guarda historico de sessoes Cowork locais; ficou no
+      backup, pode voltar depois.)
+  3. Repita o Passo C.
+  4. Se ainda travar em "Another device is connected", e caso de suporte Anthropic
+     (in-app: Help > Contact support) - ha relato igual sem solucao no GitHub
+     (anthropics/claude-code issue 46460).
+
+========================================================================
+3. BONUS - MAC APARECER TAMBEM NA ABA "CODE" DO IPHONE (Remote Control)
+========================================================================
+E um caminho separado do Dispatch e serve para o "dot" rodar Claude Code no Mac.
+  - App do Mac: Settings > Claude Code > "Connect new sessions to Remote Control"
+    = LIGADO. Se ja estiver ligado, desligue e ligue de novo (o app so salva assim).
+  - Bugs conhecidos (sem correcao ate 17/10/2026):
+      * Sessoes restauradas apos reiniciar o app voltam DESCONECTADAS (issue 48949).
+        Religue com "/remote-control" na caixa de mensagem.
+      * Sessao iniciada do iPhone num Mac servido pelo app pode travar com
+        "That mode isn't available right now" (issue 101132).
+  - Caminho que nao depende do app (mais confiavel): no Terminal do Mac,
+       cd ~ && claude remote-control
+    e deixar o Terminal aberto. O Mac aparece em Code > nova sessao > Remote control.
+    Se pedir login: "claude" e depois "/login" com a mesma conta.
+
+========================================================================
+4. O QUE NAO RESOLVE / ARMADILHAS
+========================================================================
+  - Tentar de novo pelo iPhone: nao adiciona computador, so lista o pareado.
+  - claude.ai/settings/account > "Trusted devices": e OUTRA lista (dispositivos
+    de confianca). So importa se "Require trusted devices" estiver ligado - nesse
+    caso iPhone e Mac precisam estar inscritos la; se nao usa, ignore.
+  - Linux (Steam Deck) nao tem uso do computador no Dispatch; so macOS/Windows.
+  - Dispatch exige plano Pro ou Max; nao existe em Team/Enterprise.
+  - Mac dormindo ou app fechado = some da lista. Use "caffeinate" ou
+    Ajustes do Sistema > Energia > impedir repouso automatico.
+
+========================================================================
+5. SCRIPT DE DIAGNOSTICO (somente leitura, nao mostra tokens)
+========================================================================
+Arquivo: diag-claude-mac.sh (ao lado deste). No Terminal do Mac:
+    bash ~/Downloads/diag-claude-mac.sh
+Cole a saida de volta para mim que eu fecho o diagnostico.
+
+FONTES
+  code.claude.com/docs/en/remote-control ; code.claude.com/docs/en/desktop ;
+  code.claude.com/docs/en/mobile ; support.claude.com/en/articles/13947068 (Dispatch) ;
+  support.claude.com/en/articles/14128542 (Enable computer use) ;
+  github.com/anthropics/claude-code/issues/46460, 46391, 48949, 101132.
