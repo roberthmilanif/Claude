@@ -1,0 +1,154 @@
+OPENCLAW DO CONSULTORIO (RECEPCAO NEXUS) - DIAGNOSTICO A DISTANCIA
+23/10/2026, 20:45 (America/Bahia)
+Fontes: README do modulo openclaw-nexus-administrativo (13/10, no seu Drive), configuracoes do
+OpenClaw no seu Drive (08 e 11/10), sessoes anteriores no Mac mini (27/08 e 17/10), registros da
+conta Claude, documentacao oficial OpenClaw 2026.9.5 (gateway no macOS, CLI, WhatsApp).
+
+========================================================================
+1. RESPOSTA CURTA
+========================================================================
+Provavelmente ele NAO caiu: esta PAUSADO DE PROPOSITO desde 13/10/2026.
+
+Naquele dia houve um incidente (perguntas repetidas e identificacao errada de paciente) e a
+automacao foi travada com a chave  entradaConfirmada = false  no plugin da recepcao.
+Nesse estado, por desenho do modulo:
+  - paciente que manda a mensagem da bio NAO recebe resposta nenhuma;
+  - o senhor NAO recebe aviso no seu WhatsApp;
+  - o WhatsApp da recepcao continua vinculado no Mac mini, so para atendimento manual.
+Ou seja, "nao esta funcionando" e exatamente o comportamento esperado da pausa.
+As correcoes do incidente foram escritas e testadas em 13/10, mas NAO foram religadas.
+
+Nao consigo confirmar daqui: esta sessao roda na nuvem e nao alcanca o Mac mini.
+Para fechar o diagnostico e descartar queda real, rode o script diag-openclaw-recepcao.sh
+no Mac mini e me mande a saida (Passo 1 abaixo). Ou abra uma sessao no proprio Mac
+(app Claude para Mac com Remote Control ligado, ou "claude remote-control" no Terminal)
+que eu rodo tudo e corrijo o que aparecer.
+
+========================================================================
+2. O QUE E "O OPENCLAW DO CONSULTORIO"
+========================================================================
+Mac mini (usuario roberthmilani), OpenClaw 2026.9.5, DOIS gateways no mesmo Mac:
+
+  PESSOAL   perfil padrao          ~/.openclaw                 porta 18789
+            servico launchd ai.openclaw.gateway        WhatsApp DESLIGADO desde 11/10
+  RECEPCAO  perfil nexus-recepcao  ~/.openclaw-nexus-recepcao  porta 19789
+            servico launchd ai.openclaw.nexus-recepcao  WhatsApp da recepcao vinculado
+
+Agente da recepcao: "nexus-recepcao", SEM modelo de IA (runtime "sem inferencia":
+respostas programadas, ferramentas todas negadas, grupos desativados).
+Plugin:  ~/Documents/nexus-consultorio/integracoes/openclaw-nexus-administrativo
+Estado:  ~/.openclaw-nexus-recepcao/atendimento-administrativo
+Logs:    /tmp/openclaw/openclaw-nexus-recepcao-AAAA-MM-DD.log
+         (e ~/Library/Logs/openclaw/gateway-nexus-recepcao.log)
+
+Consequencia pratica: cota ou chave de API (o problema de 27/08, cota do Gemini) NAO se
+aplica a recepcao. Ela nao chama modelo nenhum.
+
+========================================================================
+3. LINHA DO TEMPO, DOS SEUS PROPRIOS REGISTROS
+========================================================================
+07/08     OpenClaw do Mac desligado (gastava ~8,4M tokens/dia da assinatura).
+~10/08    Religado no Mac mini (porta 18789).
+26-27/08  WhatsApp pessoal mudo: conversa fixada em Gemini + cota 429. Resolvido com /model GPT.
+08/10     Modulo da recepcao preparado dentro do perfil pessoal (sem inferencia).
+11/10     Recepcao movida para perfil exclusivo (.openclaw-nexus-recepcao, 19789).
+          WhatsApp do perfil pessoal desabilitado.
+13/10     INCIDENTE: perguntas repetidas e identificacao incorreta.
+          Pausa: entradaConfirmada = false. Correcoes escritas e testadas, NAO reativadas.
+          Relatorio e backup: ~/.openclaw/backups/incidente-recepcao-20261013-164724/RELATORIO.md
+22/10 01:55  Mac mini inalcancavel para uma sessao remota (registro da conta Claude; compativel
+          com Mac dormindo ou desligado naquela hora).
+23/10     "Nao esta funcionando."
+
+========================================================================
+4. CAUSAS POSSIVEIS, POR ORDEM DE PROBABILIDADE, E COMO CADA UMA APARECE NO SCRIPT
+========================================================================
+A) Pausa intencional (entradaConfirmada = false)
+   Script: "entradaConfirmada = false", gateway e canal OK. Nada caiu.
+
+B) Teste feito com numero "reservado" ou ja atendido
+   Mudo por desenho, mesmo com a automacao ligada:
+   - seus proprios numeros e o numero da recepcao sao tratados como reservados, nao como paciente;
+   - numero que ja conversou (ex.: em 13/10) fica com o consultorio e nao reabre sozinho;
+   - so a frase EXATA da bio inicia atendimento novo:
+       "Ola, vim pelo Nexus e gostaria de falar com o Dr. Roberth."
+
+C) Mac mini dormindo, ou reiniciado sem o servico subir
+   Script: "NENHUM job ai.openclaw.*", porta 19789 sem ninguem escutando, "ultimo boot" recente,
+   pmset com sleep diferente de 0.
+
+D) WhatsApp da recepcao desvinculado (precisa ler QR de novo)
+   Script: channels status com "not linked"; log com loggedOut ou reconnect em loop.
+
+E) Os dois gateways brigando (porta ou credencial)
+   Script: EADDRINUSE no log; perfil pessoal com channels.whatsapp.enabled = true (nao deveria).
+
+F) Plugin nao carregou (pasta movida, guard de seguranca falhou)
+   Script: "FALTA ~/Documents/nexus-consultorio/..." ou doctor apontando o plugin.
+
+========================================================================
+5. O QUE FAZER
+========================================================================
+PASSO 1 - Rodar o diagnostico (1 minuto, somente leitura, nao imprime chaves nem dados de paciente)
+  Copie diag-openclaw-recepcao.sh para o Mac mini e, no Terminal:
+      bash ~/Downloads/diag-openclaw-recepcao.sh > ~/Desktop/diag-recepcao.txt 2>&1
+  Mande-me o diag-recepcao.txt. Com ele eu fecho a causa em uma resposta.
+
+PASSO 2 - Decidir o que quer da recepcao
+  Opcao A: MANTER PAUSADA (estado atual). Atendimento manual pelo WhatsApp da recepcao. Nada a fazer.
+
+  Opcao B: RELIGAR a automacao com as correcoes de 13/10.
+     Antes, o que o README do modulo condiciona: liberar so apos teste controlado com NUMERO
+     EXTERNO (nao o seu). Limitacoes ainda abertas: audio sem transcricao interrompe o fluxo;
+     imagem com legenda pode passar por texto; o modulo nao percebe quando o senhor respondeu
+     manualmente na mesma conversa. Aceitando isso, os comandos no Terminal do Mac mini sao:
+
+      openclaw --profile nexus-recepcao config get plugins.entries.nexus-recepcao.config.entradaConfirmada
+      openclaw --profile nexus-recepcao config set plugins.entries.nexus-recepcao.config.entradaConfirmada true --strict-json --dry-run
+      openclaw --profile nexus-recepcao config set plugins.entries.nexus-recepcao.config.entradaConfirmada true --strict-json
+      openclaw --profile nexus-recepcao config validate
+      openclaw --profile nexus-recepcao gateway restart
+      openclaw --profile nexus-recepcao channels status --probe
+
+     Teste: de um celular que NUNCA falou com a recepcao, mandar a frase exata da bio.
+     Esperado em segundos:
+       "Ola! Sou o assistente virtual do consultorio do Dr. Roberth Milani. Como posso ajudar?"
+     Ao fim do fluxo, UM aviso no seu WhatsApp (nome, contato, categoria; sem relato clinico).
+     Reverter: o mesmo "config set ... false" seguido de "gateway restart".
+     NAO rodar "openclaw doctor --fix": o README avisa que ele pode criar defaults e ampliar o perfil.
+
+PASSO 3 - Se o script mostrar queda real
+  Servico parado:         openclaw --profile nexus-recepcao gateway restart
+                          (se o plist sumiu: openclaw --profile nexus-recepcao gateway install --port 19789)
+  WhatsApp desvinculado:  cp -a ~/.openclaw-nexus-recepcao/credentials/whatsapp/default \
+                                ~/.openclaw-nexus-recepcao/credentials/whatsapp/default.bak
+                          openclaw --profile nexus-recepcao channels login --channel whatsapp
+                          (ler o QR com o celular da recepcao)
+  Mac dormindo:           Ajustes do Sistema > Energia > impedir repouso automatico com a tela apagada;
+                          ou "caffeinate -dims &" num Terminal que fique aberto.
+  Porta ocupada:          descobrir quem esta na 19789 (lsof -nP -iTCP:19789) antes de reiniciar.
+
+========================================================================
+6. O QUE O SENHOR NAO PERGUNTOU, MAS PRECISA SABER
+========================================================================
+1. CHAVES EXPOSTAS NO SEU DRIVE. Os arquivos openclaw.original.json e openclaw.candidato.json
+   (pasta .nexus-openclaw-preparacao/audio-consultorio-..., 08/10) trazem em texto puro a chave da
+   OpenAI, a chave do Gemini/Google e um token do Pierre Finance. Qualquer compartilhamento dessa
+   pasta vaza tudo. Recomendo: revogar e gerar novas (OpenAI, Google AI Studio, Pierre), atualizar
+   o secret-store do OpenClaw pessoal e apagar essas copias do Drive. Nao afeta a recepcao (sem
+   modelo), afeta o assistente pessoal e a sua conta.
+2. Os dois gateways rodam no mesmo usuario macOS. A separacao e logica, nao de sistema. Ja consta
+   no README; so registro.
+3. Mesmo religada, a recepcao NAO agenda, NAO confirma consulta e NAO envia questionario. So anota
+   o pedido e avisa o senhor. Confirmacao continua manual, no Nexus.
+4. Se o Mac mini dorme a noite, o WhatsApp da recepcao cai junto: paciente que escreve as 23h fica
+   sem resposta ate o Mac acordar. O perfil pessoal tinha um "keepawake"; o da recepcao, pelo que
+   vi, nao.
+5. Sessao na nuvem (como esta) nunca alcanca o Mac. Para eu operar o OpenClaw diretamente, use a
+   sessao no proprio Mac. O passo a passo esta no repositorio Claude, branch
+   claude/mac-mini-dispatch-checklist, arquivo mac-mini-dispatch-checklist.txt, secao 3.
+
+Referencias: docs OpenClaw 2026.9.5 (gateway macOS: rotulos ai.openclaw.<perfil>, plist em
+~/Library/LaunchAgents, logs; CLI: --profile, gateway status --deep, channels status --probe,
+config set/validate, doctor; WhatsApp: troubleshooting) e README.md do modulo
+openclaw-nexus-administrativo (13/10/2026).
