@@ -1,0 +1,54 @@
+POST 7 — "VOCÊ JÁ SOFREU TUDO O QUE AINDA NÃO ACONTECEU."
+@roberthmilani — 27/10/2026
+Formato: 1080x1350 (4:5). Sem logo, borda, número de página, seta, emoji. Assinatura só na última página.
+
+--- TEXTOS ---
+p1: você / já sofreu / tudo / o que / ainda não / aconteceu
+p2: o futuro / é um bom endereço / para o que / não tem nome: / fica aberto / e não desmente / ninguém
+p3: ninguém sofre antes / por acaso. / é uma oferenda: / se doer / agora, / talvez / não aconteça
+p4: o pior, / pelo menos, / tem forma
+p5: o tratamento / não cancela / o futuro. / devolve a ele / a única coisa / que era sua: / não ter acontecido
+p6: roberth milani / crm-pe 39702 · médico
+
+--- LEGENDA ---
+antecipar é a forma mais respeitável de não estar aqui.
+
+--- BLOCO FIXO (vai no início de cada prompt p1–p5) ---
+Use a imagem anexa como referência exata de estilo. Fundo vermelho chapado #A3261A (vermelho-tijolo profundo, levemente alaranjado, nada de vermelho vivo ou vinho), sem degradê nem vinheta, com grão fino e uniforme. Figuras em lata prateada em alto-relevo, repuxada à mão e martelada (pequenas covas, brilhos e sombras do relevo), recortadas e pousadas sobre o vermelho com sombra curta: silhuetas humanas estilizadas, lisas, sem detalhe anatômico e sem rosto detalhado, como ex-votos de metal. Estrelas de lata prateada em relevo, de 5 e 6 pontas, irregulares, com borda picotada. Texto em branco, minúsculas, sans-serif geométrica limpa de peso médio, pequeno, em fragmentos soltos: cada fragmento mais baixo que o anterior, alternando os lados, com muito vermelho vazio entre eles. Nenhum texto nos 10% superiores nem nos 10% inferiores da imagem. Não reproduza o número 13 nem os ícones de interface dos cantos da referência. Formato vertical. Nenhum outro texto, logo, borda, número de página, seta ou emoji.
+
+--- COMPOSIÇÃO + TEXTO POR PÁGINA ---
+p1: a figura da frente de "A Dança", de Matisse — a que se estica quase na horizontal estendendo o braço para a mão da vizinha —, agora sozinha, no terço inferior da página: a mão aberta alcança um espaço vazio onde não há mão nenhuma. Três estrelas pequenas, no alto e à direita. O resto é vermelho vazio.
+Texto — exatamente assim, com os acentos, de cima para baixo: "você" (alto, à esquerda) / "já sofreu" (alto, à direita) / "tudo" (centro) / "o que" (meio, à esquerda) / "ainda não" (meio, à direita) / "aconteceu" (embaixo, à esquerda, logo à frente da mão aberta). Nesta página, texto um pouco maior que na referência.
+
+p2: a roda de "A Dança", de Matisse, com quatro dançarinos de lata. No lugar do quinto — a figura da frente, a mesma que estendia a mão na página anterior —, só o contorno do corpo em pontilhado prateado picotado, vazio por dentro, mostrando o vermelho. Duas estrelas.
+Texto: "o futuro" (alto, à esquerda) / "é um bom endereço" (alto, à direita) / "para o que" (centro) / "não tem nome:" (dentro do contorno vazio) / "fica aberto" (meio, à direita) / "e não desmente" (embaixo, à esquerda) / "ninguém" (embaixo, ao centro).
+
+p3: peças avulsas de lata prateada, como ex-votos pregados na parede de uma sala de milagres, em grade irregular: um coração, uma cabeça de perfil, um par de olhos, um estômago e uma figura ajoelhada estendendo as mãos abertas e vazias. Sem santo, sem cruz, sem vela, sem fita. Duas estrelas pequenas.
+Texto: "ninguém sofre antes" (alto, à esquerda) / "por acaso." (alto, à direita) / "é uma oferenda:" (centro) / "se doer" (meio, à esquerda) / "agora," (meio, à direita) / "talvez" (embaixo, à esquerda) / "não aconteça" (embaixo, ao centro).
+
+p4: um único medalhão redondo de lata no centro da página, com uma figura encolhida em relevo dentro dele, cabendo exatamente no círculo. Uma estrela pequena. O resto é vermelho vazio.
+Texto: "o pior," (alto, à esquerda) / "pelo menos," (acima do medalhão, à direita) / "tem forma" (abaixo do medalhão, ao centro).
+
+p5: a roda inteira de "A Dança", de Matisse — cinco dançarinos de lata, como no quadro original —, com as duas mãos da frente quase se tocando, sem se tocar, exatamente como no quadro. Quatro estrelas.
+Texto: "o tratamento" (alto, à esquerda) / "não cancela" (alto, à direita) / "o futuro." (centro da roda) / "devolve a ele" (meio, à esquerda) / "a única coisa" (meio, à direita) / "que era sua:" (embaixo, à esquerda) / "não ter acontecido" (embaixo, ao centro).
+
+p6 (prompt próprio): Use a imagem anexa como referência exata de estilo. Fundo vermelho chapado #A3261A, sem degradê nem vinheta, com grão fino e uniforme. Só o vermelho e duas estrelas pequenas de lata prateada em relevo, irregulares, com borda picotada, sem figuras. Texto em branco, minúsculas, sans-serif geométrica limpa de peso médio, centralizado: "roberth milani" (centro, maior que nas outras páginas) / "crm-pe 39702 · médico" (logo abaixo, menor). Não reproduza o número 13 nem os ícones de interface. Formato vertical. Nenhum outro texto, logo, borda, número de página, seta ou emoji.
+
+--- PÓS-GERAÇÃO ---
+ChatGPT entrega 1024x1536 (2:3), não 4:5. Recortar para 4:5 centralizado (corta ~8% em cima e ~8% embaixo) e exportar 1080x1350. Por isso a faixa de segurança de 10% no bloco fixo.
+
+--- TEXTO ALTERNATIVO ---
+p1: Fundo vermelho. Uma figura de lata prateada, sozinha, estende a mão para um vazio. Texto: "Você já sofreu tudo o que ainda não aconteceu."
+p2: Quatro figuras prateadas dançam em roda; no lugar da quinta, só o contorno vazio de um corpo. Texto: "O futuro é um bom endereço para o que não tem nome: fica aberto e não desmente ninguém."
+p3: Ex-votos de lata sobre vermelho: coração, cabeça, olhos, estômago e uma figura ajoelhada oferecendo as mãos vazias. Texto: "Ninguém sofre antes por acaso. É uma oferenda: se doer agora, talvez não aconteça."
+p4: Medalhão prateado com uma figura encolhida dentro, sobre fundo vermelho. Texto: "O pior, pelo menos, tem forma."
+p5: Cinco figuras prateadas dançam em roda; as mãos da frente quase se tocam. Texto: "O tratamento não cancela o futuro. Devolve a ele a única coisa que era sua: não ter acontecido."
+p6: Fundo vermelho com estrelas prateadas. Assinatura: "Roberth Milani, CRM-PE 39702, médico."
+
+--- REVISÃO ANTES DE POSTAR ---
+- Acentos: você, já, não, ninguém, é, endereço, única, aconteça, médico.
+- Cada fragmento mais baixo que o anterior, em todas as páginas.
+- Mesmo vermelho, grão e lata nas seis páginas.
+- Sem 13, sem ícones de interface, sem estrela grande de 5 pontas sozinha.
+- Nenhum fragmento cortado no recorte 4:5.
+- Texto errado 2x: gerar sem texto ("Sem nenhum texto.") e aplicar as palavras por cima.
