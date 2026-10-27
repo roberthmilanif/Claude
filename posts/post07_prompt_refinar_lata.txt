@@ -1,0 +1,14 @@
+POST 7 — PROMPT DE REFINO DO METAL (aplicar em p1, p2 e p5, uma por vez, na mesma conversa)
+Anexar a imagem da página + a imagem de referência original. Colar:
+
+Refaça esta imagem mantendo exatamente a composição, a pose e a posição de cada figura, o fundo vermelho, as estrelas e todo o texto (mesmas palavras, acentos, fonte, tamanho e lugar). Mude só o material das figuras, para ficar igual à referência anexa:
+
+- Folha fina de lata (folha de flandres) de ex-voto popular, repuxada à mão pelo avesso. Relevo baixo e raso, de poucos milímetros, como chapa estufada, e não escultura com volume.
+- Silhueta recortada com tesoura de funileiro: borda levemente irregular, um pouco dobrada e serrilhada, com uma fileira de pontinhos puncionados acompanhando todo o contorno.
+- Marteladas grandes, irregulares e desiguais. Amassados, riscos, pequenas ondulações da chapa, partes achatadas.
+- Brilho duro e estourado em algumas áreas, cinza fosco cor de chumbo em outras, e escurecido de oxidação nos vincos. Nada de cromado polido, prata de joalheria ou render 3D liso.
+- Corpo sem anatomia: sem seios, músculos, umbigo nem dedos detalhados. Cabeça oval lisa, mãos como pás simples, membros grossos e chapados, como as silhuetas de Matisse em "A Dança".
+- Cada figura parece pregada na parede: sombra curta e dura logo atrás da chapa.
+Aparência de peça artesanal de sala de milagres, crua e feita à mão, e não de escultura de galeria.
+
+SE O TEXTO SAIR ERRADO: trocar a primeira frase por "Refaça esta imagem sem nenhum texto, mantendo exatamente a composição, as figuras, o fundo e as estrelas." e me mandar; eu aplico o texto por cima (mesma fonte e posições).
