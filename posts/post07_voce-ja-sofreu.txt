@@ -59,3 +59,8 @@ p6: Fundo vermelho com estrelas prateadas. Assinatura: "Roberth Milani, CRM-PE 3
 - Sem 13, sem ícones de interface, sem estrela grande de 5 pontas sozinha.
 - Imagem gerada sem nenhuma letra (se vier com texto, regerar).
 - Depois da aplicação: nenhuma palavra sobre figura ou estrela.
+
+--- RASCUNHO SEM CHATGPT ---
+posts/figuras.py desenha as figuras de lata (dançarinos, ex-votos, medalhão, estrelas) por código.
+Rodar: python3 figuras.py fig && python3 aplicar_texto.py fig post07_rascunho --ajustes ajustes_rascunho.json
+Resultado em posts/post07_rascunho/ (p1..p6 em 1080x1350 + folha_contato.png). Serve como prova de composição; as figuras do ChatGPT, a partir da referência, ficam mais próximas da lata repuxada à mão.
