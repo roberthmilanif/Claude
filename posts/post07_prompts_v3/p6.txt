@@ -1,0 +1,9 @@
+Mesma série da imagem anterior; lata, vermelho e tipografia são os da referência anexada na primeira mensagem, sem o número dentro da estrela dela e sem os ícones de interface dos cantos. Passe este prompt inteiro ao gerador de imagens, sem resumir.
+
+Material: fotografia frontal, sem perspectiva: duas estrelas recortadas em lata fina, pousadas num painel de vermelho #A3261A, chapado de borda a borda, com grão fino. Chapa de lata fina, sem pintura, achatada, cortada à tesoura, com borda um pouco irregular, repuxada pelo avesso em relevo raso de poucos milímetros; covinhas miúdas e desiguais, puncionadas uma a uma e espalhadas ao acaso, riscos finos. Alumínio de lata, de feitura crua, cinza-prata, de reflexo duro e frio, todo em branco e cinza, com meios-tons levemente azulados: flash duro de cima à esquerda estoura pontos brancos nas cristas, deixa uma sombra cinza fria no fundo de cada covinha e faz sombra curta e dura; o vermelho fica sempre chapado. Estrelas de 5 e 6 pontas, irregulares, pontinhos na borda, pequenas, só covinhas por dentro. Texto branco, minúsculas, sans-serif geométrica limpa de peso médio, centralizado. Imagem vertical 2:3 (1024x1536); nos 15% de cima e de baixo, só vermelho chapado; todas as peças, estrelas e textos ficam entre 15% e 85% da altura.
+
+Composição: só o vermelho e duas estrelas pequenas em cantos opostos: uma de 5 pontas no alto à direita, por volta de 20% da altura; uma de 6 pontas embaixo à esquerda, por volta de 78%. O centro fica livre para as duas linhas de texto.
+
+Texto. Escreva exatamente e somente o que está entre aspas, com os acentos e o ponto mediano; os parênteses são só a posição e não se escrevem:
+"roberth milani" (centro da página, maior, tudo em minúsculas) / "crm-pe 39702 · médico" (logo abaixo, menor, também tudo em minúsculas)
+Nenhum outro texto, logo, borda, número de página, seta ou emoji.
