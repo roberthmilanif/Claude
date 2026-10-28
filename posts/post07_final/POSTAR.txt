@@ -18,6 +18,7 @@ CONFERÊNCIA FEITA
 - Nenhum texto ou figura cortado no recorte 4:5.
 - p5: cinco dançarinos, uma cabeça cada, vão visível entre as mãos da frente.
 - Sem número nas estrelas, sem ícones de interface, assinatura só na p6.
+- Realce do metal nas seis páginas (posts/realcar_metal.py): nitidez das covinhas e contornos cerca de 2x, brilho mais aberto sem estourar, prata fria e neutra. Fundo e texto não alterados (diferença zero no vermelho).
 
 ORIGEM (imagens do ChatGPT, lote prata)
 p1 = 1c990581 · p2 = c92181d2 · p3 = 7ccae333 · p4 = e37dc917 · p5 = 00071325 · p6 = d89a9493
