@@ -1,0 +1,66 @@
+POST 7 — "VOCÊ JÁ SOFREU TUDO O QUE AINDA NÃO ACONTECEU."
+@roberthmilani — 27/10/2026
+Formato: 1080x1350 (4:5). Sem logo, borda, número de página, seta, emoji. Assinatura só na última página.
+
+--- TEXTOS ---
+p1: você / já sofreu / tudo / o que / ainda não / aconteceu
+p2: o futuro / é um bom endereço / para o que / não tem nome: / fica aberto / e não desmente / ninguém
+p3: ninguém sofre antes / por acaso. / é uma oferenda: / se doer / agora, / talvez / não aconteça
+p4: o pior, / pelo menos, / tem forma
+p5: o tratamento / não cancela / o futuro. / devolve a ele / a única coisa / que era sua: / não ter acontecido
+p6: roberth milani / crm-pe 39702 · médico
+
+--- LEGENDA ---
+antecipar é a forma mais respeitável de não estar aqui.
+
+--- FLUXO (TEXTO APLICADO DEPOIS, NÃO PELO CHATGPT) ---
+1. Uma conversa só no ChatGPT, na ordem p1 -> p6. Na p1, anexar a imagem de referência. Nas seguintes, começar com "Mesmo estilo da imagem anterior." e colar o bloco fixo + a composição da página.
+2. Baixar as 6 imagens, nomear p1..p6 e me mandar.
+3. Eu rodo posts/aplicar_texto.py: corta para 4:5, exporta 1080x1350 e aplica os textos em Jost Medium branca, nas posições abaixo. Se uma palavra cair sobre uma figura, ajusto a posição e devolvo.
+Vantagem: zero erro de acento, mesma fonte e tamanho nas 6 páginas, e regerar uma imagem não obriga a acertar texto de novo.
+
+--- BLOCO FIXO (início de cada prompt, p1 a p6) ---
+Use a imagem anexa como referência exata de estilo. Fundo vermelho chapado #A3261A (vermelho-tijolo profundo, levemente alaranjado, nada de vermelho vivo ou vinho), sem degradê nem vinheta, com grão fino e uniforme. Figuras em lata prateada em alto-relevo, repuxada à mão e martelada (pequenas covas, brilhos e sombras do relevo), recortadas e pousadas sobre o vermelho com sombra curta: silhuetas humanas estilizadas, lisas, sem detalhe anatômico e sem rosto detalhado, como ex-votos de metal. Estrelas de lata prateada em relevo, de 5 e 6 pontas, irregulares, com borda picotada, pequenas. NÃO coloque nenhum texto, letra ou número na imagem: as áreas indicadas como vazias ficam só com o vermelho, porque o texto entra depois. Não reproduza o número 13 nem os ícones de interface dos cantos da referência. Formato vertical. Nenhum logo, borda, seta ou emoji.
+
+--- COMPOSIÇÃO POR PÁGINA (colar depois do bloco fixo) ---
+p1: a figura da frente de "A Dança", de Matisse — a que se estica quase na horizontal estendendo o braço —, agora sozinha, no quarto inferior direito da página, com o braço esticado para a esquerda e a mão aberta terminando perto do meio da largura, alcançando um espaço vazio onde não há mão nenhuma. Três estrelas pequenas no canto superior direito. Toda a metade de cima e toda a faixa da esquerda ficam vermelhas e vazias.
+
+p2: a roda de "A Dança", de Matisse, pequena, ocupando só a metade central da largura e o meio da altura. Quatro dançarinos de lata. No lugar do quinto — a figura da frente, a que estende a mão —, só o contorno do corpo em pontilhado prateado picotado, vazio por dentro, mostrando o vermelho. Duas estrelas pequenas perto da roda. O quarto de cima e o quarto de baixo da página ficam vermelhos e vazios, assim como as duas laterais.
+
+p3: peças avulsas de lata prateada, como ex-votos pregados na parede de uma sala de milagres, em grade irregular no meio da página, ocupando só a metade central da largura: um coração, uma cabeça de perfil, um par de olhos, um estômago e uma figura ajoelhada estendendo as mãos abertas e vazias. No centro da grade, um espaço vazio do tamanho de uma peça. Sem santo, sem cruz, sem vela, sem fita. Duas estrelas pequenas. O quinto de cima e o quinto de baixo da página ficam vermelhos e vazios, assim como as duas laterais.
+
+p4: um único medalhão redondo de lata no centro da página, com cerca de metade da largura, e uma figura encolhida em relevo dentro dele, cabendo exatamente no círculo. Uma estrela pequena. Todo o resto é vermelho vazio.
+
+p5: a roda inteira de "A Dança", de Matisse — cinco dançarinos de lata —, no meio da página, ocupando metade da largura e indo de um quarto a três quartos da altura, com as duas mãos da frente quase se tocando, sem se tocar, exatamente como no quadro original. O centro da roda fica vazio. Quatro estrelas pequenas. O quarto de cima e o quarto de baixo da página ficam vermelhos e vazios.
+
+p6: só o vermelho e duas estrelas pequenas, sem figuras, nos cantos. O centro da página fica vermelho e vazio.
+
+--- POSIÇÃO DOS TEXTOS (aplicada pelo script; y = altura a partir do topo) ---
+p1 (maior): você E 13% · já sofreu D 21% · tudo C 30% · o que E 39% · ainda não D 47% · aconteceu E 60%
+p2: o futuro E 10% · é um bom endereço D 16% · para o que C 23% · não tem nome: dentro do contorno · fica aberto D 60% · e não desmente E 80% · ninguém C 87%
+p3: ninguém sofre antes E 10% · por acaso. D 16% · é uma oferenda: no vão da grade · se doer E 56% · agora, D 63% · talvez E 80% · não aconteça C 87%
+p4: o pior, E 14% · pelo menos, D 22% · tem forma C 80%
+p5: o tratamento E 10% · não cancela D 16% · o futuro. C 47% (centro da roda) · devolve a ele E 78% · a única coisa D 82% · que era sua: E 86% · não ter acontecido C 91%
+p6: roberth milani C 47% (maior) · crm-pe 39702 · médico C 53%
+(E = esquerda, D = direita, C = centro)
+
+--- TEXTO ALTERNATIVO ---
+p1: Fundo vermelho. Uma figura de lata prateada, sozinha, estende a mão para um vazio. Texto: "Você já sofreu tudo o que ainda não aconteceu."
+p2: Quatro figuras prateadas dançam em roda; no lugar da quinta, só o contorno vazio de um corpo. Texto: "O futuro é um bom endereço para o que não tem nome: fica aberto e não desmente ninguém."
+p3: Ex-votos de lata sobre vermelho: coração, cabeça, olhos, estômago e uma figura ajoelhada oferecendo as mãos vazias. Texto: "Ninguém sofre antes por acaso. É uma oferenda: se doer agora, talvez não aconteça."
+p4: Medalhão prateado com uma figura encolhida dentro, sobre fundo vermelho. Texto: "O pior, pelo menos, tem forma."
+p5: Cinco figuras prateadas dançam em roda; as mãos da frente quase se tocam. Texto: "O tratamento não cancela o futuro. Devolve a ele a única coisa que era sua: não ter acontecido."
+p6: Fundo vermelho com estrelas prateadas. Assinatura: "Roberth Milani, CRM-PE 39702, médico."
+
+--- REVISÃO ANTES DE POSTAR ---
+- Acentos: você, já, não, ninguém, é, endereço, única, aconteça, médico.
+- Cada fragmento mais baixo que o anterior, em todas as páginas.
+- Mesmo vermelho, grão e lata nas seis páginas.
+- Sem 13, sem ícones de interface, sem estrela grande de 5 pontas sozinha.
+- Imagem gerada sem nenhuma letra (se vier com texto, regerar).
+- Depois da aplicação: nenhuma palavra sobre figura ou estrela.
+
+--- RASCUNHO SEM CHATGPT ---
+posts/figuras.py desenha as figuras de lata (dançarinos, ex-votos, medalhão, estrelas) por código.
+Rodar: python3 figuras.py fig && python3 aplicar_texto.py fig post07_rascunho --ajustes ajustes_rascunho.json
+Resultado em posts/post07_rascunho/ (p1..p6 em 1080x1350 + folha_contato.png). Serve como prova de composição; as figuras do ChatGPT, a partir da referência, ficam mais próximas da lata repuxada à mão.

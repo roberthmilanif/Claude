@@ -1,0 +1,16 @@
+POST 7 — p5: corrigir a mão que segura o pé
+
+O PROBLEMA: na p5, o dançarino deitado embaixo estica o braço direito e segura o PÉ do dançarino agachado da direita. Tem de ser mão com mão.
+
+OPÇÃO 1 (recomendada) — p5 nova no mesmo estilo da p2 escolhida
+Anexe a p2 final (post07_p2.png) e cole:
+
+Use a imagem anexa como referência exata de estilo: as mesmas figuras de lata simples, sem anatomia, com covinhas, o mesmo vermelho vivo com grão fino, as mesmas estrelas e a mesma letra. Faça a roda inteira de "A Dança", de Matisse, com cinco dançarinos de lata, cada um com uma cabeça, dois braços e duas pernas, todos de mãos dadas: cada ligação é sempre uma mão segurando outra mão, nunca uma mão segurando pé, perna ou braço. Embaixo, o dançarino da frente, quase deitado, estica o braço esquerdo para a mão do dançarino grande da esquerda e as duas mãos quase se tocam sem se tocar, com vermelho visível entre elas; o braço direito dele segura a mão do dançarino agachado da direita. O centro da roda fica vazio. Quatro estrelas pequenas fora da roda. Texto em branco, minúsculas, do mesmo tamanho e na mesma letra da imagem anexa. Escreva exatamente e somente o que está entre aspas, com os acentos; os parênteses são só a posição e não se escrevem: "o tratamento" (alto, à esquerda) / "não cancela" (alto, à direita) / "o futuro." (no centro vazio da roda) / "devolve a ele" (meio, à esquerda) / "a única coisa" (meio, à direita) / "que era sua:" (embaixo, à esquerda) / "não ter acontecido" (embaixo, ao centro). Nenhum outro texto, logo, borda, número de página, seta ou emoji. Formato vertical.
+
+OPÇÃO 2 — corrigir só a ligação na p5 atual (mantém o estilo Matisse da p1)
+Anexe a p5 final (post07_p5.png) e cole:
+
+Edite esta imagem mudando só um detalhe. Hoje o dançarino deitado embaixo segura com a mão direita o pé do dançarino agachado da direita. Troque isso: ele deve segurar a mão desse dançarino agachado, mão com mão, como nas outras ligações da roda. O dançarino agachado desce o braço até a mão do dançarino deitado, e a perna dele que hoje vai para a esquerda fica dobrada junto ao corpo, sem encostar em ninguém. Mantenha exatamente todo o resto: as outras figuras e poses, o vão vazio entre a mão esquerda do dançarino deitado e a mão do dançarino grande da esquerda, as estrelas, o fundo vermelho, o grão, a lata e todo o texto, com as mesmas palavras, acentos, tamanhos e posições. Formato vertical.
+
+DEPOIS: me mande a imagem que eu ajusto vermelho, recorte 4:5 e brilho da prata igual às outras páginas.
+SE O TEXTO SAIR ERRADO: peça "Refaça igual, sem nenhum texto." e me mande; eu aplico o texto por cima.
