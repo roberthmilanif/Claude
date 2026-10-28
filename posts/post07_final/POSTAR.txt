@@ -1,0 +1,24 @@
+POST 7 — "você já sofreu tudo o que ainda não aconteceu"
+Carrossel 4:5 (1080x1350), 6 páginas, nesta ordem: post07_p1.png a post07_p6.png.
+
+LEGENDA
+antecipar é a forma mais respeitável de não estar aqui.
+
+TEXTO ALTERNATIVO (Instagram: Configurações avançadas > Acessibilidade, um por imagem)
+p1: Fundo vermelho. Uma figura de lata prateada, sozinha, estende a mão para um vazio. Texto: "Você já sofreu tudo o que ainda não aconteceu."
+p2: Quatro figuras prateadas dançam em roda; no lugar da quinta, só o contorno vazio de um corpo. Texto: "O futuro é um bom endereço para o que não tem nome: fica aberto e não desmente ninguém."
+p3: Ex-votos de lata sobre vermelho: coração, cabeça, olhos, estômago e uma figura ajoelhada oferecendo as mãos vazias. Texto: "Ninguém sofre antes por acaso. É uma oferenda: se doer agora, talvez não aconteça."
+p4: Medalhão prateado com uma figura encolhida dentro, sobre fundo vermelho. Texto: "O pior, pelo menos, tem forma."
+p5: Cinco figuras prateadas dançam em roda; as mãos da frente quase se tocam. Texto: "O tratamento não cancela o futuro. Devolve a ele a única coisa que era sua: não ter acontecido."
+p6: Fundo vermelho com estrelas prateadas. Assinatura: "Roberth Milani, CRM-PE 39702, médico."
+
+CONFERÊNCIA FEITA
+- Textos lidos página a página: todos exatos, com acentos e o ponto mediano da assinatura.
+- Fundo das seis páginas no mesmo vermelho da referência (#A3261A), com o grão preservado.
+- Nenhum texto ou figura cortado no recorte 4:5.
+- p5: cinco dançarinos, uma cabeça cada, vão visível entre as mãos da frente.
+- Sem número nas estrelas, sem ícones de interface, assinatura só na p6.
+
+ORIGEM (imagens do ChatGPT, lote prata)
+p1 = 1c990581 · p2 = c92181d2 · p3 = 7ccae333 · p4 = e37dc917 · p5 = 00071325 · p6 = d89a9493
+Alternativa em lata clara: pasta post07_final_alternativa_claro/.
