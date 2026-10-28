@@ -14,13 +14,13 @@ p6: Fundo vermelho com estrelas prateadas. Assinatura: "Roberth Milani, CRM-PE 3
 
 CONFERÊNCIA FEITA
 - Textos lidos página a página: todos exatos, com acentos e o ponto mediano da assinatura.
-- Fundo das seis páginas no mesmo vermelho da referência (#A3261A), com o grão preservado.
+- Fundo das seis páginas no mesmo vermelho vivo (#CD0302, o da p2 escolhida), com grão fino igualado nas seis.
 - Nenhum texto ou figura cortado no recorte 4:5.
 - p5: cinco dançarinos, uma cabeça cada, vão visível entre as mãos da frente.
 - Sem número nas estrelas, sem ícones de interface, assinatura só na p6.
-- p2: "não tem nome:" na horizontal e no mesmo tamanho dos outros fragmentos (letras de 16 px), dentro do contorno.
+- p2: versão com "não tem / nome:" em duas linhas, no mesmo tamanho dos outros fragmentos, dentro do contorno.
 - Realce do metal nas seis páginas (posts/realcar_metal.py): nitidez das covinhas e contornos cerca de 2x, brilho mais aberto sem estourar, prata fria e neutra. Fundo e texto não alterados (diferença zero no vermelho).
 
 ORIGEM (imagens do ChatGPT, lote prata)
-p1 = 1c990581 · p2 = 3537bb09 · p3 = 7ccae333 · p4 = e37dc917 · p5 = 00071325 · p6 = d89a9493
+p1 = 1c990581 · p2 = 276c5b0e · p3 = 7ccae333 · p4 = e37dc917 · p5 = 00071325 · p6 = d89a9493
 Alternativa em lata clara: pasta post07_final_alternativa_claro/.
