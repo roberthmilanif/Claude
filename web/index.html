@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Teleatendimento</title>
+<meta name="description" content="Fale com um médico por vídeo, sem sair de casa. Entre na fila e aguarde a chamada.">
+<meta name="theme-color" content="#0b6b62">
+<meta name="robots" content="noindex">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/icons/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="preload" href="/assets/fonts/figtree-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/base.css">
+</head>
+<body class="paciente">
+<div class="wrap">
+  <header class="topo">
+    <div class="marca"><img src="/icons/favicon.svg" alt="" width="28" height="28"><b id="marca-nome">Teleatendimento</b></div>
+    <a class="sos" href="tel:192" aria-label="Emergência: ligar para o SAMU, 192">Emergência 192</a>
+  </header>
+  <main id="app" aria-live="polite">
+    <p class="muted">Carregando…</p>
+  </main>
+  <noscript><p class="alerta">Este aplicativo precisa de JavaScript ativado no navegador.</p></noscript>
+</div>
+<script src="/config.js"></script>
+<script src="/assets/vendor/supabase.js"></script>
+<script type="module" src="/assets/paciente.js"></script>
+</body>
+</html>
