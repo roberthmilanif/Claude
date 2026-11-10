@@ -1,0 +1,11 @@
+-- Migração remota 20261110153337 (endurecer_fila_e_sinalizacao).
+--
+-- NÃO foi escrita neste repositório: outra sessão a aplicou direto no banco em 10/11/2026, por cima
+-- da 0001/0002. Ela trocou a API por outra (esquema teleatendimento_private, fila só por ordem de
+-- chegada, sem bloqueio de sinal de alarme, sinalização de vídeo por tabela). Foi desfeita por inteiro
+-- pela 0005_restaurar_api.sql, por decisão do Doutor. Não havia atendimento gravado.
+--
+-- Este arquivo existe só para a numeração bater com o histórico remoto. O texto original fica
+-- guardado no próprio banco:
+--   select statements from supabase_migrations.schema_migrations where version = '20261110153337';
+select 1;

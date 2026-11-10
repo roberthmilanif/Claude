@@ -20,6 +20,7 @@ begin
     (v_col, 'colega-teste@teste.invalid', now()),
     (v_intruso, 'intruso-teste@teste.invalid', now());
   insert into public.medicos_autorizados (email, admin) values ('adm-teste@teste.invalid', true);
+  update public.medicos set visto_em = null;   -- médico de verdade não conta como online durante o teste
 
   if not public.cpf_valido('52998224725') or public.cpf_valido('52998224724')
      or public.cpf_valido('11111111111') or public.cpf_valido('123') then
@@ -169,6 +170,11 @@ begin
   exception when others then
     get stacked diagnostics err = message_text;
     if err not like 'Só o administrador%' then raise exception 'FALHA intruso autorizar: %', err; end if;
+  end;
+  begin
+    perform public.entrar_na_fila('Paciente Teste Quatro', '52998224725', '', '1980-05-10', '74999990001', 'Tosse', ok, '2026-11-10');
+    raise exception 'FALHA usuario logado executou funcao do paciente';
+  exception when insufficient_privilege then null;
   end;
   passou := passou + 1;
 

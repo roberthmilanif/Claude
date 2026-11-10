@@ -1,0 +1,11 @@
+-- Migração remota 20261110155140 (retencao_e_aviso_privacidade).
+--
+-- NÃO foi escrita neste repositório: a mesma outra sessão da 0003 a aplicou direto no banco.
+-- Ela ligou a extensão pg_cron e agendou uma limpeza de hora em hora (fichas encerradas apagadas
+-- após 7 dias; pedidos parados há 24 h viravam desistência), além de um aviso de privacidade e de
+-- um segundo registro de consentimento. Dependia do esquema da 0003, removido pela 0005; o que
+-- sobrou foi retirado pela 0006_limpar_restos.sql. A extensão pg_cron continua instalada, sem tarefas.
+--
+-- Este arquivo existe só para a numeração bater com o histórico remoto. O texto original:
+--   select statements from supabase_migrations.schema_migrations where version = '20261110155140';
+select 1;
