@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fila de Teleatendimento</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* layout: coluna única de celular (max 520px), barra fixa com 3 visões, cartões só onde há um paciente */
+:root{
+  --bg:#f2f5f4; --surface:#ffffff; --ink:#12262b; --muted:#5b6f73; --line:#d5dedc;
+  --accent:#0b6b62; --accent-ink:#ffffff; --accent-soft:#dcefeb;
+  --warn:#9a5a00; --warn-soft:#fdeccb; --crit:#b3261e; --crit-soft:#fbe1df; --ok:#1d6b3a; --ok-soft:#dcf1e2;
+  --display:"Bricolage Grotesque","Figtree",system-ui,sans-serif;
+  --body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#0e1819; --surface:#172426; --ink:#e6efed; --muted:#93a8a8; --line:#2a3b3d;
+    --accent:#4cc2b2; --accent-ink:#06211e; --accent-soft:#173a37;
+    --warn:#f0b454; --warn-soft:#3a2c10; --crit:#ff8a80; --crit-soft:#40191a; --ok:#7fd49a; --ok-soft:#163222;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0e1819; --surface:#172426; --ink:#e6efed; --muted:#93a8a8; --line:#2a3b3d;
+  --accent:#4cc2b2; --accent-ink:#06211e; --accent-soft:#173a37;
+  --warn:#f0b454; --warn-soft:#3a2c10; --crit:#ff8a80; --crit-soft:#40191a; --ok:#7fd49a; --ok-soft:#163222;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.45}
+.wrap{max-width:520px;margin:0 auto;padding:0 16px 48px}
+header{position:sticky;top:0;z-index:5;background:var(--bg);padding:14px 0 10px;display:flex;flex-direction:column;gap:10px}
+.brand{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+.brand b{font-family:var(--display);font-size:20px;letter-spacing:-.01em}
+.brand span{font-size:12px;color:var(--warn);background:var(--warn-soft);padding:2px 8px;border-radius:99px;font-weight:600}
+nav{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:4px}
+nav a{text-align:center;padding:9px 4px;border-radius:9px;text-decoration:none;color:var(--muted);font-weight:600;font-size:14px}
+nav a.on{background:var(--accent);color:var(--accent-ink)}
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+h1{font-family:var(--display);font-size:26px;line-height:1.15;margin:14px 0 6px;text-wrap:balance;letter-spacing:-.015em}
+h2{font-family:var(--display);font-size:18px;margin:22px 0 8px}
+p{margin:0 0 10px}
+.muted{color:var(--muted);font-size:14px}
+.steps{display:flex;gap:6px;margin:6px 0 2px}
+.steps i{flex:1;height:4px;border-radius:4px;background:var(--line)}
+.steps i.on{background:var(--accent)}
+form,.stack{display:flex;flex-direction:column;gap:14px}
+label{display:flex;flex-direction:column;gap:5px;font-weight:600;font-size:14px}
+label small{font-weight:400;color:var(--muted)}
+input[type=text],input[type=tel],input[type=date],textarea{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;width:100%}
+textarea{min-height:84px;resize:vertical}
+.err{color:var(--crit);font-size:13px;font-weight:600;min-height:1em}
+.check{flex-direction:row;align-items:flex-start;gap:10px;font-weight:500;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px}
+.check input{width:20px;height:20px;margin-top:1px;accent-color:var(--accent);flex:none}
+button{font:inherit;cursor:pointer;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:12px 14px;font-weight:600}
+button.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+button.primary:disabled{opacity:.45;cursor:not-allowed}
+button.ghost{background:transparent;border-color:transparent;color:var(--muted);padding:8px}
+.opt{display:flex;flex-direction:column;gap:8px}
+.opt button{text-align:left;display:flex;justify-content:space-between;padding:16px 14px}
+.opt button::after{content:"›";color:var(--muted)}
+.qnum{font-size:13px;color:var(--muted);font-weight:600;font-variant-numeric:tabular-nums}
+.q{font-family:var(--display);font-size:22px;line-height:1.2;margin:4px 0 14px;text-wrap:balance}
+.alert{background:var(--crit-soft);border:1px solid var(--crit);border-radius:14px;padding:18px}
+.alert h1{color:var(--crit);margin-top:0}
+.tel{font-family:var(--display);font-size:40px;font-weight:700;color:var(--crit);line-height:1}
+.ticket{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px;text-align:center}
+.ticket .pos{font-family:var(--display);font-size:72px;font-weight:700;line-height:1;color:var(--accent);font-variant-numeric:tabular-nums}
+.ticket .senha{font-variant-numeric:tabular-nums;font-weight:700;letter-spacing:.04em}
+.now{background:var(--ok-soft);border-color:var(--ok)}
+.now .pos{color:var(--ok);font-size:34px}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.tile b{display:block;font-family:var(--display);font-size:26px;line-height:1.1;font-variant-numeric:tabular-nums}
+.tile span{font-size:12px;color:var(--muted)}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.stepper{display:flex;align-items:center;gap:8px}
+.stepper button{width:40px;height:40px;padding:0;font-size:20px}
+.stepper b{min-width:2ch;text-align:center;font-variant-numeric:tabular-nums}
+.list{display:flex;flex-direction:column;gap:8px}
+.pt{background:var(--surface);border:1px solid var(--line);border-left:5px solid var(--line);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:8px}
+.pt.pri{border-left-color:var(--warn)}
+.pt.att{border-left-color:var(--ok)}
+.pt .top{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.pt .nm{font-weight:700;overflow-wrap:anywhere}
+.pt .wt{font-size:13px;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+.pt .qx{font-size:14px;overflow-wrap:anywhere}
+.chips{display:flex;flex-wrap:wrap;gap:5px}
+.chip{font-size:12px;font-weight:600;padding:2px 8px;border-radius:99px;background:var(--accent-soft);color:var(--ink)}
+.chip.w{background:var(--warn-soft);color:var(--warn)}
+.chip.g{background:var(--ok-soft);color:var(--ok)}
+.chip.x{background:transparent;border:1px dashed var(--line);color:var(--muted)}
+.acts{display:flex;gap:8px;flex-wrap:wrap}
+.acts button,.acts a{flex:1 1 140px;text-align:center}
+a.btn{display:block;text-decoration:none;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:12px 14px;font-weight:600}
+pre{margin:0;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px;font:13px/1.45 ui-monospace,Menlo,Consolas,monospace;white-space:pre-wrap;overflow-wrap:anywhere}
+ol.flow{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px}
+ol.flow li::marker{font-weight:700;color:var(--accent)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:600;font-size:12px}
+.tw{overflow-x:auto}
+.empty{color:var(--muted);text-align:center;padding:18px;border:1px dashed var(--line);border-radius:12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand"><b>Fila de Teleatendimento</b><span>protótipo, dados fictícios</span></div>
+    <nav aria-label="Visões">
+      <a href="#paciente" id="nav-paciente">Paciente</a>
+      <a href="#medico" id="nav-medico">Médico</a>
+      <a href="#plano" id="nav-plano">Plano</a>
+    </nav>
+  </header>
+  <main id="app"></main>
+</div>
+<script>
+const MIN_POR_CONSULTA = 8;
+const Q = [
+  {id:'resp',  t:'Você está com dificuldade para respirar?', red:true,  chip:'Dispneia'},
+  {id:'peito', t:'Você está com dor forte no peito?', red:true, chip:'Dor torácica'},
+  {id:'neuro', t:'Teve desmaio, confusão ou perda de força em um lado do corpo?', red:true, chip:'Sinal neurológico'},
+  {id:'febre', t:'Você tem febre alta (acima de 39 °C)?', pri:true, chip:'Febre > 39 °C'},
+  {id:'dor',   t:'Você está com dor intensa que não melhora?', pri:true, chip:'Dor intensa'},
+  {id:'cronica', t:'Você tem alguma doença (diabetes, pressão alta, problema no coração ou pulmão) e os sintomas pioraram hoje?', pri:true, chip:'Crônico descompensando'},
+  {id:'tempo', t:'Há quanto tempo os sintomas começaram?', opts:['Não tive sintomas','Menos de 24 horas','De 1 a 3 dias','Mais de 3 dias']},
+  {id:'escala',t:'Como você classifica sua dor agora?', opts:['Nenhuma','Leve','Moderada','Forte']}
+];
+const now = Date.now(), m = 60000;
+const S = {
+  doctors:1, seq:105, done:6, me:null, step:'cadastro', qi:0, ans:{}, copied:null,
+  form:{nome:'',cpf:'',cns:'',tel:'',nasc:'',queixa:''}, terms:[false,false,false],
+  queue:[
+    {id:101,ex:true,nome:'Maria das Graças (exemplo)',cpf:'***.***.***-**',cns:'',tel:'',nasc:'1961-03-02',queixa:'Tosse e febre há 2 dias',ans:{febre:'Sim',tempo:'De 1 a 3 dias',escala:'Leve'},pri:true,at:now-14*m,status:'aguardando'},
+    {id:102,ex:true,nome:'José Carlos (exemplo)',cpf:'***.***.***-**',cns:'',tel:'',nasc:'1988-11-20',queixa:'Dor de garganta, quer atestado',ans:{tempo:'Menos de 24 horas',escala:'Leve'},pri:false,at:now-11*m,status:'aguardando'},
+    {id:103,ex:true,nome:'Ana Beatriz (exemplo)',cpf:'***.***.***-**',cns:'',tel:'',nasc:'1999-07-08',queixa:'Ardência para urinar desde ontem',ans:{tempo:'De 1 a 3 dias',escala:'Moderada'},pri:false,at:now-7*m,status:'aguardando'},
+    {id:104,ex:true,nome:'Francisco (exemplo)',cpf:'***.***.***-**',cns:'',tel:'',nasc:'1954-01-15',queixa:'Renovação de receita de losartana',ans:{tempo:'Não tive sintomas',escala:'Nenhuma'},pri:false,at:now-3*m,status:'aguardando'}
+  ]
+};
+const $ = s => document.querySelector(s);
+const esc = s => String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const view = () => (['paciente','medico','plano'].includes(location.hash.slice(1)) ? location.hash.slice(1) : 'paciente');
+const waiting = () => S.queue.filter(p=>p.status==='aguardando').sort((a,b)=>(b.pri-a.pri)||(a.at-b.at));
+const mins = t => Math.max(0,Math.round((Date.now()-t)/m));
+const idade = d => { if(!d) return ''; const b=new Date(d+'T00:00'), n=new Date(); let a=n.getFullYear()-b.getFullYear(); if(n<new Date(n.getFullYear(),b.getMonth(),b.getDate())) a--; return a; };
+const brDate = d => d ? d.split('-').reverse().join('/') : '';
+function cpfOk(v){ const c=v.replace(/\D/g,''); if(c.length!==11||/^(\d)\1+$/.test(c)) return false;
+  for(let t=9;t<11;t++){ let s=0; for(let i=0;i<t;i++) s+=+c[i]*(t+1-i); if(((s*10)%11)%10!==+c[t]) return false; } return true; }
+const maskCpf = v => v.replace(/\D/g,'').slice(0,11).replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d{1,2})$/,'$1-$2');
+const maskTel = v => { const d=v.replace(/\D/g,'').slice(0,11); return d.length<3?d: d.length<8?`(${d.slice(0,2)}) ${d.slice(2)}`:`(${d.slice(0,2)}) ${d.slice(2,7)}-${d.slice(7)}`; };
+const chipsOf = p => Q.filter(q=>q.chip&&p.ans[q.id]==='Sim').map(q=>`<span class="chip w">${q.chip}</span>`).join('')
+  + (p.ans.tempo?`<span class="chip">${esc(p.ans.tempo)}</span>`:'') + (p.ans.escala?`<span class="chip">Dor: ${esc(p.ans.escala.toLowerCase())}</span>`:'');
+const ficha = p => [`Nome: ${p.nome}`,`CPF: ${p.cpf}`,`CNS: ${p.cns||'não informado'}`,`Nascimento: ${brDate(p.nasc)} (${idade(p.nasc)} anos)`,`Telefone: ${p.tel||'não informado'}`,
+  `Queixa principal: ${p.queixa}`,`Triagem: ${Q.map(q=>p.ans[q.id]?`${q.chip||(q.id==='tempo'?'Início':'Dor')}: ${p.ans[q.id]}`:'').filter(Boolean).join('; ')}`].join('\n');
+
+function steps(n){ return `<div class="steps" aria-hidden="true">${[0,1,2,3].map(i=>`<i class="${i<=n?'on':''}"></i>`).join('')}</div>`; }
+
+function vPaciente(){
+  const f=S.form;
+  if(S.step==='cadastro') return steps(0)+`<h1>Fale com um médico sem sair de casa</h1>
+    <p class="muted">Preencha seus dados. Você entra na fila e o médico chama pelo WhatsApp.</p>
+    <form id="f-cad" novalidate>
+      <label for="i-nome">Nome completo<input id="i-nome" type="text" autocomplete="name" value="${esc(f.nome)}"></label>
+      <label for="i-cpf">CPF<input id="i-cpf" type="text" inputmode="numeric" placeholder="000.000.000-00" value="${esc(f.cpf)}"></label>
+      <label for="i-cns">Cartão do SUS <small>opcional</small><input id="i-cns" type="text" inputmode="numeric" value="${esc(f.cns)}"></label>
+      <label for="i-nasc">Data de nascimento<input id="i-nasc" type="date" value="${esc(f.nasc)}"></label>
+      <label for="i-tel">WhatsApp com DDD<input id="i-tel" type="tel" inputmode="numeric" placeholder="(87) 90000-0000" value="${esc(f.tel)}"></label>
+      <label for="i-queixa">O que você está sentindo?<textarea id="i-queixa">${esc(f.queixa)}</textarea></label>
+      <div class="err" id="cad-err" role="alert"></div>
+      <button class="primary" type="submit">Continuar</button>
+    </form>`;
+  if(S.step==='termos'){ const T=['Estou em um lugar silencioso, com boa internet e câmera funcionando.','Sei que este atendimento não substitui urgência e emergência.','Autorizo o uso dos meus dados para este atendimento e o registro em prontuário.'];
+    return steps(1)+`<h1>Antes de entrar na fila</h1><div class="stack">
+      ${T.map((t,i)=>`<label class="check" for="t${i}"><input type="checkbox" id="t${i}" data-term="${i}" ${S.terms[i]?'checked':''}><span>${t}</span></label>`).join('')}
+      <button class="primary" id="b-termos" ${S.terms.every(Boolean)?'':'disabled'}>Responder triagem</button>
+      <button class="ghost" data-go="cadastro">Voltar</button></div>`; }
+  if(S.step==='triagem'){ const q=Q[S.qi]; const o=q.opts||['Sim','Não'];
+    return steps(2)+`<div class="qnum">Pergunta ${S.qi+1} de ${Q.length}</div><div class="q">${q.t}</div>
+      <div class="opt">${o.map(x=>`<button data-ans="${esc(x)}">${esc(x)}</button>`).join('')}</div>`; }
+  if(S.step==='alerta') return `<div class="alert"><h1>Procure atendimento presencial agora</h1>
+      <p>Pelo que você respondeu, o seu caso precisa de avaliação presencial imediata. A consulta por vídeo não é segura para isso.</p>
+      <p>Ligue para o SAMU ou vá à UPA ou emergência mais próxima.</p><div class="tel">192</div></div>
+      <p style="margin-top:14px"><button class="ghost" data-reset="1">Refazer o cadastro</button></p>`;
+  const me=S.queue.find(p=>p.id===S.me); if(!me) return '';
+  if(me.status==='atendimento') return steps(3)+`<div class="ticket now"><div class="pos">É a sua vez</div>
+      <p style="margin-top:10px">O médico vai ligar por vídeo no WhatsApp <b>${esc(me.tel)}</b>. Fique com o celular por perto.</p><div class="senha">Senha ${me.id}</div></div>`;
+  if(me.status==='finalizado') return `<h1>Atendimento encerrado</h1><p class="muted">A receita e os documentos chegam pelo WhatsApp informado.</p><button data-reset="1">Novo atendimento</button>`;
+  const w=waiting(), ahead=w.findIndex(p=>p.id===me.id), est=Math.round(ahead/S.doctors*MIN_POR_CONSULTA);
+  return steps(3)+`<div class="ticket"><div class="muted">Sua posição na fila</div><div class="pos">${ahead+1}º</div>
+      <p>${ahead===0?'Você é o próximo.':`Espera estimada: cerca de <b>${est} min</b>`}</p>
+      <div class="senha">Senha ${me.id}${me.pri?' · prioridade':''}</div></div>
+    <p class="muted" style="margin-top:12px">Não feche esta página. Se piorar enquanto espera, ligue 192.</p>
+    <p class="muted">Demonstração: abra a visão Médico e chame os pacientes para ver a fila andar.</p>
+    <button class="ghost" data-sair="1">Sair da fila</button>`;
+}
+
+function card(p){
+  const att=p.status==='atendimento';
+  const wa=p.tel?`https://wa.me/55${p.tel.replace(/\D/g,'')}?text=${encodeURIComponent('Olá! Aqui é do teleatendimento. Chegou a sua vez, posso ligar por vídeo agora?')}`:'';
+  return `<div class="pt ${p.pri?'pri':''} ${att?'att':''}">
+    <div class="top"><span class="nm">${p.id} · ${esc(p.nome)}${idade(p.nasc)!==''?`, ${idade(p.nasc)} a`:''}</span><span class="wt">${att?'em atendimento':`há ${mins(p.at)} min`}</span></div>
+    <div class="qx">${esc(p.queixa)}</div>
+    <div class="chips">${p.pri?'<span class="chip w">Prioridade</span>':''}${chipsOf(p)}</div>
+    ${att?`<pre id="ficha-${p.id}">${esc(ficha(p))}</pre>
+      <div class="acts"><button data-copy="${p.id}">${S.copied===p.id?'Copiado':'Copiar ficha para o Amigo'}</button>
+      ${wa?`<a class="btn" href="${wa}" target="_blank" rel="noopener">Abrir WhatsApp</a>`:'<span class="chip x">exemplo sem telefone</span>'}
+      <button class="primary" data-fim="${p.id}">Finalizar</button></div>`
+     :`<div class="acts"><button class="primary" data-chamar="${p.id}">Chamar</button></div>`}
+  </div>`;
+}
+function vMedico(){
+  const w=waiting(), a=S.queue.filter(p=>p.status==='atendimento');
+  const max=w.length?Math.max(...w.map(p=>mins(p.at))):0;
+  return `<h1>Painel do plantão</h1>
+    <div class="tiles"><div class="tile"><b>${w.length}</b><span>na fila</span></div><div class="tile"><b>${max} min</b><span>maior espera</span></div><div class="tile"><b>${S.done}</b><span>atendidos hoje</span></div></div>
+    <div class="row"><span class="muted">Médicos online (recalcula a espera de todos)</span>
+      <div class="stepper"><button data-doc="-1" aria-label="Menos um médico">−</button><b>${S.doctors}</b><button data-doc="1" aria-label="Mais um médico">+</button></div></div>
+    ${a.length?`<h2>Em atendimento</h2><div class="list">${a.map(card).join('')}</div>`:''}
+    <h2>Aguardando</h2>
+    <div class="list">${w.length?w.map(card).join(''):'<div class="empty">Fila vazia.</div>'}</div>
+    <p class="muted" style="margin-top:14px">Ordem: prioridade primeiro, depois hora de chegada. Sinais de alarme não entram na fila, são mandados para o 192.</p>`;
+}
+function vPlano(){
+  return `<h1>Como isso vira serviço de verdade</h1>
+    <p class="muted">O site só faz o que o Amigo não faz: cadastro pelo paciente, triagem e fila. Consulta, prontuário e receita digital continuam no Amigo.</p>
+    <h2>Fluxo</h2>
+    <ol class="flow">
+      <li>Paciente abre o link, informa nome, CPF, Cartão do SUS, WhatsApp e queixa.</li>
+      <li>Responde a triagem. Sinal de alarme é barrado e orientado a ligar 192.</li>
+      <li>Entra na fila e vê posição e espera estimada em tempo real.</li>
+      <li>O médico de plantão chama, copia a ficha pronta para o cadastro no Amigo e liga por vídeo.</li>
+      <li>Receita, atestado e pedidos saem do Amigo e vão para o WhatsApp do paciente.</li>
+    </ol>
+    <h2>O que é preciso montar</h2>
+    <div class="tw"><table>
+      <tr><th>Peça</th><th>Com o quê</th><th>Situação</th></tr>
+      <tr><td>Site e painel</td><td>Vercel</td><td>conta já existe</td></tr>
+      <tr><td>Fila em tempo real, login do médico</td><td>Supabase</td><td>conta já existe</td></tr>
+      <tr><td>Prontuário e receita</td><td>Amigo</td><td>já em uso</td></tr>
+      <tr><td>Vídeo</td><td>WhatsApp ou teleconsulta do Amigo</td><td>a decidir</td></tr>
+      <tr><td>Aviso automático de vez</td><td>API do WhatsApp</td><td>segunda fase</td></tr>
+    </table></div>
+    <h2>Decisões que travam a versão real</h2>
+    <ol class="flow">
+      <li>Quem paga: prefeitura, convênio ou particular com Pix antes da fila.</li>
+      <li>Horário de funcionamento e quantos médicos por turno.</li>
+      <li>Se o Amigo libera cadastro por integração, o que elimina o copiar e colar.</li>
+      <li>Perguntas de triagem e critérios de prioridade, validados por vocês.</li>
+    </ol>`;
+}
+
+function render(){
+  const v=view(); ['paciente','medico','plano'].forEach(n=>$('#nav-'+n).classList.toggle('on',n===v));
+  $('#app').innerHTML = v==='medico'?vMedico(): v==='plano'?vPlano(): vPaciente();
+}
+function reset(){ S.me=null; S.step='cadastro'; S.qi=0; S.ans={}; S.terms=[false,false,false]; }
+
+document.addEventListener('input',e=>{
+  const t=e.target;
+  if(t.id==='i-cpf') t.value=maskCpf(t.value);
+  if(t.id==='i-tel') t.value=maskTel(t.value);
+  if(t.id==='i-cns') t.value=t.value.replace(/\D/g,'').slice(0,15);
+  if(t.id&&t.id.startsWith('i-')) S.form[t.id.slice(2)]=t.value;
+  if(t.dataset.term){ S.terms[+t.dataset.term]=t.checked; $('#b-termos').disabled=!S.terms.every(Boolean); }
+});
+document.addEventListener('submit',e=>{
+  e.preventDefault(); const f=S.form; let er='';
+  if(f.nome.trim().split(/\s+/).length<2) er='Informe nome e sobrenome.';
+  else if(!cpfOk(f.cpf)) er='CPF inválido. Confira os números.';
+  else if(!f.nasc) er='Informe a data de nascimento.';
+  else if(f.tel.replace(/\D/g,'').length<10) er='Informe o WhatsApp com DDD.';
+  else if(f.queixa.trim().length<3) er='Conte em poucas palavras o que está sentindo.';
+  if(er){ $('#cad-err').textContent=er; return; }
+  S.step='termos'; render(); scrollTo(0,0);
+});
+document.addEventListener('click',e=>{
+  const t=e.target.closest('button'); if(!t) return; const d=t.dataset;
+  if(t.id==='b-termos'){ S.step='triagem'; S.qi=0; S.ans={}; }
+  else if(d.go) S.step=d.go;
+  else if(d.reset){ reset(); }
+  else if(d.sair){ S.queue=S.queue.filter(p=>p.id!==S.me); reset(); }
+  else if(d.ans){ const q=Q[S.qi]; S.ans[q.id]=d.ans;
+    if(q.red&&d.ans==='Sim'){ S.step='alerta'; }
+    else if(++S.qi>=Q.length){ const pri=Q.some(q=>q.pri&&S.ans[q.id]==='Sim')||S.ans.escala==='Forte';
+      const p={id:S.seq++,...S.form,nome:S.form.nome.trim(),queixa:S.form.queixa.trim(),ans:{...S.ans},pri,at:Date.now(),status:'aguardando'};
+      S.queue.push(p); S.me=p.id; S.step='fila'; } }
+  else if(d.chamar){ S.queue.find(p=>p.id==d.chamar).status='atendimento'; }
+  else if(d.fim){ S.queue.find(p=>p.id==d.fim).status='finalizado'; S.done++; }
+  else if(d.doc){ S.doctors=Math.min(9,Math.max(1,S.doctors+ +d.doc)); }
+  else if(d.copy){ const p=S.queue.find(p=>p.id==d.copy); const ok=()=>{S.copied=p.id;render();};
+    try{ navigator.clipboard.writeText(ficha(p)).then(ok,()=>{}); }catch(_){} return; }
+  else return;
+  render();
+});
+addEventListener('hashchange',render);
+setInterval(()=>{ if(view()==='medico'||(view()==='paciente'&&S.step==='fila')) render(); },30000);
+render();
+</script>
+</body>
+</html>

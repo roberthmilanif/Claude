@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Painel do plantão</title>
+<meta name="theme-color" content="#0b6b62">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="/icons/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<link rel="preload" href="/assets/fonts/figtree-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/base.css">
+</head>
+<body class="painel">
+<div class="wrap">
+  <header class="topo">
+    <div class="marca"><img src="/icons/favicon.svg" alt="" width="28" height="28"><b>Painel do plantão</b></div>
+    <div class="quem" id="quem" hidden>
+      <i class="ponto" aria-hidden="true"></i><span id="quem-nome"></span>
+      <button class="mini" data-acao="perfil">Meus dados</button>
+      <button class="mini" data-acao="sair">Sair</button>
+    </div>
+  </header>
+  <main>
+    <div id="acesso"><p class="muted">Carregando…</p></div>
+    <div id="painel" hidden>
+      <div class="erro" id="msg" role="alert"></div>
+      <div id="tiles"></div>
+      <div class="colunas" id="colunas">
+        <section id="col-ativo" hidden aria-label="Paciente em atendimento">
+          <h2>Em atendimento</h2>
+          <div class="video-medico" id="video" hidden>
+            <video id="v-remoto" autoplay playsinline></video>
+            <video id="v-local" class="espelho" autoplay playsinline muted></video>
+            <div class="ch-estado" id="ch-estado"></div>
+            <button class="ch-aviso" id="ch-aviso" data-acao="som-chamada" hidden></button>
+            <div class="ch-botoes">
+              <button data-acao="mic" id="b-mic" aria-label="Desligar microfone"></button>
+              <button data-acao="cam" id="b-cam" aria-label="Desligar câmera"></button>
+              <button data-acao="fechar-video" class="vermelho" aria-label="Fechar o vídeo (o atendimento continua aberto)"></button>
+            </div>
+          </div>
+          <div id="ativo" class="pilha"></div>
+        </section>
+        <section aria-label="Fila de espera">
+          <div id="fila"></div>
+          <div id="outros"></div>
+        </section>
+      </div>
+      <div id="encerrados"></div>
+      <div id="admin"></div>
+      <p class="rodape">Ordem da fila: prioridade primeiro, depois hora de chegada. Quem responde "sim" a falta de ar, dor forte no peito ou sinal neurológico não entra na fila: é orientado a ligar 192. A triagem é um rascunho, não um protocolo validado.</p>
+    </div>
+  </main>
+</div>
+<script src="/config.js"></script>
+<script src="/assets/vendor/supabase.js"></script>
+<script type="module" src="/assets/medico.js"></script>
+</body>
+</html>
