@@ -38,19 +38,23 @@ o médico liga dentro do app (toca na tela do paciente, com nome e CRM do médic
 | `web/config.js` | URL e chave pública do Supabase, nome do serviço, servidores ICE. |
 | `web/vercel.json` | Cabeçalhos de segurança (CSP) e o agendamento do keep-alive. |
 | `web/api/keepalive.js` | Rota chamada 1x/dia pela Vercel para o Supabase gratuito não pausar. |
-| `supabase/migrations/` | Esquema do banco, exatamente como aplicado. |
+| `supabase/migrations/` | Esquema do banco, na ordem do histórico remoto (0003 e 0004 são só marcadores de migrações de outra sessão). |
 | `tests/` | Teste do banco (SQL) e teste de ponta a ponta (Playwright). Ver `tests/README.md`. |
 | `referencia/prototipo.html` | Protótipo antigo. Só referência de fluxo e visual. |
 
 ## Estado atual
 
+- **No ar**: https://teleatendimento-brown.vercel.app (paciente) e `/medico` (painel).
 - **Supabase**: projeto `teleatendimento`, ref `lwxdvwsqswwgmzolqdit`, sa-east-1, organização
-  `zpujhvxulnkmkpzqrgsi`, plano gratuito. Migrações `0001_init` e `0002_menos_superficie` aplicadas.
-- **Advisors de segurança**: nenhum erro. Restam avisos 0028/0029 ("função security definer
-  executável por anon/authenticated"): são o próprio desenho (paciente sem conta só fala com o
-  banco por 4 funções) e estão aceitos. Desempenho: só um índice ainda sem uso (banco novo).
-- **Vercel**: ver seção "Publicação" abaixo.
-- **Testes**: `tests/sql/teste_esquema.sql` passa (26 blocos). E2E: ver "Publicação".
+  `zpujhvxulnkmkpzqrgsi`, plano gratuito. Seis migrações no histórico remoto (ver "O que aconteceu
+  em 10/11" abaixo); o esquema em vigor é o de `0001` + `0002`, recriado pela `0005`.
+  O Doutor já tem usuário (e-mail confirmado), perfil preenchido e é o admin.
+- **Advisors de segurança**: nenhum erro. Avisos aceitos: 0028/0029 ("função security definer
+  executável por anon/authenticated": é o próprio desenho, o paciente sem conta só fala com o banco
+  por 4 funções) e "leaked password protection" desligada (liga-se no painel do Supabase Auth).
+  Desempenho: só um índice ainda sem uso (banco novo).
+- **Testes** (10/11/2026): `tests/sql/teste_esquema.sql` passa (26 blocos) e `tests/e2e.cjs` passa
+  inteiro contra o site publicado (23 passos). Os dados e os médicos de teste foram apagados.
 
 ## Arquitetura (como foi construído)
 
@@ -98,19 +102,52 @@ Regras propostas pelo Claude e **ainda não validadas pelo Doutor**:
 - Não é protocolo validado (não é Manchester). Tratar como rascunho.
 
 As perguntas ficam em `web/assets/comum.js` (`PERGUNTAS`) e as regras em `entrar_na_fila`
-(migração 0001). Mudou um, mude o outro.
+(texto em vigor: migração 0005, que recria a da 0001). Mudou um, mude o outro, em migração nova.
 
 ## Publicação
 
-(preenchido ao final da sessão de 10/11/2026; ver abaixo)
+- **Vercel**: conta pessoal do Doutor (escopo `roberths-projects-885b6f07`, id
+  `team_ZThoAaL5UJwlghNBpI8EYXbB`), projeto `teleatendimento`
+  (`prj_ib7pcRdHpkKg8hyxiH59zQbxdE6F`), sem framework, raiz `web`. O conector da Vercel pede
+  autorização do escopo a cada sessão nova (`authorize_team_access`; o Doutor aprova por um link).
+- **Como publicar**: `create_deployment` com `target: production` e
+  `gitSource: { type: github, org: roberthmilanif, repo: Claude, ref: <branch>, sha: <commit> }`.
+  Não há publicação automática a cada push confirmada; publicar de propósito depois de testar.
+- **Depois de publicar**: rodar `tests/e2e.cjs` contra a URL (precisa de dois médicos de teste;
+  ver `tests/README.md`) e apagar os dados de teste.
+- **Rede da sessão de nuvem**: o ambiente "Claude (teleatendimento)" libera só
+  `teleatendimento-brown.vercel.app` e `lwxdvwsqswwgmzolqdit.supabase.co`, o suficiente para o E2E.
+- O que o E2E **não** prova: os dois lados rodam na mesma máquina, com câmera falsa. Ele confirma
+  sinalização, fluxo e telas, mas não confirma conexão em 4G/CGNAT nem câmera, microfone e toque em
+  celular de verdade (em especial iPhone/Safari). Isso é teste manual do Doutor.
+
+## O que aconteceu em 10/11 (duas sessões no mesmo banco)
+
+Enquanto esta sessão trabalhava, outra sessão (fora do Claude Code na nuvem) recebeu o mesmo pedido
+e mexeu no mesmo Supabase e na mesma Vercel:
+
+- aplicou `endurecer_fila_e_sinalizacao` (0003) e `retencao_e_aviso_privacidade` (0004) direto no
+  banco, apagando as funções da 0001 e pondo outra API (fila só por ordem de chegada, sem bloqueio
+  de sinal de alarme, médico só podia chamar o primeiro, sinalização de vídeo por tabela, limpeza
+  agendada com pg_cron);
+- publicou outro app (Vite) no projeto `teleatendimento` da Vercel.
+
+O Doutor escolheu a versão deste repositório e encerrou a outra sessão. A `0005` desfez a 0003 e
+recriou a API; a `0006` tirou os restos da 0004. Ficou de lá só o hook opcional
+`teleatendimento_private.bloquear_cadastro_nao_autorizado` (barra cadastro de e-mail não autorizado;
+liga-se em Authentication > Hooks > Before User Created) e a extensão pg_cron instalada, sem tarefas.
+Os dois deploys antigos do outro app continuam listados no projeto da Vercel: não promover.
+
+**Lição**: antes de aplicar migração, conferir `list_migrations`. Se aparecer migração que não está
+em `supabase/migrations/`, parar e avisar o Doutor: há outra sessão ou alguém mexendo.
 
 ## Pendências e riscos
 
 1. **E-mail do Supabase Auth**: o serviço de e-mail embutido só entrega para endereços que são
-   membros da organização no Supabase. Colega de fora não recebe o link de confirmação: é preciso
-   configurar SMTP próprio (Authentication > SMTP) ou criar um fluxo de cadastro pelo admin.
-   Configurar também Authentication > URL Configuration (Site URL e Redirect URLs com a URL do
-   site), senão o link do e-mail volta para localhost (a confirmação vale mesmo assim).
+   membros da organização no Supabase (o do Doutor chegou). Colega de fora não recebe o link de
+   confirmação: é preciso configurar SMTP próprio (Authentication > SMTP) ou criar um fluxo de
+   cadastro pelo admin. Conferir Authentication > URL Configuration: Site URL
+   `https://teleatendimento-brown.vercel.app` e Redirect URL `https://teleatendimento-brown.vercel.app/medico`.
    **Nunca desligar "Confirm email"**: sem ela, quem se cadastrar primeiro com um e-mail
    autorizado vira médico.
 2. Plano gratuito do Supabase pausa após 7 dias sem atividade. Mitigação: rota `/api/keepalive`
@@ -120,7 +157,8 @@ As perguntas ficam em `web/assets/comum.js` (`PERGUNTAS`) e as regras em `entrar
    mas não há captcha nem limite por IP. Avaliar Turnstile antes de divulgar o link.
 4. LGPD: CPF e queixa são dado sensível. O consentimento fica registrado (`consentimento_em`,
    `termos_versao`). Falta definir prazo de retenção, quem é o controlador e o texto do aviso
-   de privacidade com esses nomes.
+   de privacidade com esses nomes. Hoje nada é apagado sozinho: as fichas ficam no banco.
+   (A outra sessão tinha posto 7 dias por conta própria; foi removido por não ser decisão do Doutor.)
 5. CFM 2.314/2022: consentimento registrado, prontuário (no Amigo) e responsável técnico do
    serviço. O Doutor não tem RQE: a coluna `medicos.especialidade` fica nula e o app mostra só
    "Médico(a)" + CRM. Não anunciar especialidade.
