@@ -27,6 +27,8 @@ const M = {
   copiado: '',
   ocupado: false,
   idsFila: null,
+  meuId: null,           // paciente que estava comigo na última atualização
+  silenciar: null,       // paciente que eu mesmo acabei de devolver/encerrar (não precisa de aviso)
   aberto: { encerrados: false, admin: false },
   rodando: false,
 };
@@ -325,13 +327,18 @@ function pintarPainel() {
   M.idsFila = ids;
   document.title = `${fila.length ? `(${fila.length}) ` : ''}Painel do plantão`;
 
-  // a chamada de vídeo acompanha o paciente ativo
-  if (M.chamada && (!meu || meu.id !== M.chamadaId)) {
-    fecharVideo();
-    const foi = M.lista.find((p) => p.id === M.chamadaId);
-    if (foi?.status === 'desistiu') avisar('O paciente saiu da fila antes do atendimento.');
-    else if (foi?.status === 'aguardando') avisar('O paciente voltou para a fila.');
+  // o paciente que estava comigo deixou de estar, sem ser por ação minha: explica o que houve
+  if (M.meuId && (!meu || meu.id !== M.meuId)) {
+    const foi = M.lista.find((p) => p.id === M.meuId);
+    if (foi && foi.id !== M.silenciar) {
+      if (foi.status === 'desistiu') avisar('O paciente saiu da fila antes do atendimento.');
+      else if (foi.status === 'aguardando') avisar('O paciente voltou para a fila.');
+    }
+    M.silenciar = null;
   }
+  M.meuId = meu?.id || null;
+  // a chamada de vídeo acompanha o paciente ativo
+  if (M.chamada && (!meu || meu.id !== M.chamadaId)) fecharVideo();
 
   por('tiles', `<div class="tiles">
       <div class="tile"><b>${fila.length}</b><span>na fila</span></div>
@@ -424,6 +431,8 @@ async function bater() {
 function iniciarPainel() {
   M.rodando = true;
   M.idsFila = null;
+  M.meuId = null;
+  M.silenciar = null;
   for (const k of Object.keys(cache)) delete cache[k];
   bater();
   atualizar();
@@ -528,12 +537,14 @@ const ACOES = {
   'fechar-video': () => { fecharVideo(); pintarPainel(); },
   devolver: async (b) => {
     if (!confirm('Devolver o paciente à fila? Ele mantém o lugar e pode ser chamado de novo.')) return;
+    M.silenciar = b.dataset.id;
     const { error } = await sb.rpc('devolver', { p_id: b.dataset.id });
     if (error) avisar(msgErro(error));
     await atualizar();
   },
   encerrar: async (b) => {
     if (!confirm(CONFIRMA[b.dataset.desfecho])) return;
+    M.silenciar = b.dataset.id;
     const { error } = await sb.rpc('encerrar', { p_id: b.dataset.id, p_desfecho: b.dataset.desfecho });
     if (error) avisar(msgErro(error));
     await atualizar();
